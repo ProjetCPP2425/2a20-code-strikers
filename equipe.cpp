@@ -1,12 +1,12 @@
 #include "equipe.h"
 #include <QDebug>
-equipe::equipe(QString id, QString nom_equipe, QDate date_creation, QString entraineur,
+equipe::equipe(int id, QString nom_equipe, QDate date_creation, QString entraineur,
                QString categorie, int nb_vic, int nb_defaite, int nb_null,int pnt, QString email)
     : id(id), nom_equipe(nom_equipe), date_creation(date_creation), entraineur(entraineur),
     categorie(categorie), nb_vic(nb_vic), nb_defaite(nb_defaite), nb_null(nb_null),nb_pnt(pnt), email(email) {}
 
 equipe::equipe() {
-    id = "";
+    id = 0;
     nom_equipe = "";
     date_creation = QDate::currentDate();  // Initialize to the current date
     nb_vic = 0;
@@ -16,7 +16,7 @@ equipe::equipe() {
     email = "";
 }
 
-QString equipe::getId(){
+int equipe::getId(){
     return id;
 }
 
@@ -121,18 +121,18 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
 
     // Add two extra columns for buttons (Modifier, Supprimer)
     model->insertColumn(10);
-    model->insertColumn(11);
-    model->setHeaderData(10, Qt::Horizontal, "Modifier");
-    model->setHeaderData(11, Qt::Horizontal, "Supprimer");
+
+    model->setHeaderData(10, Qt::Horizontal, "Supprimer");
+
     tableView->setModel(model);
     tableView->setColumnHidden(0,true);
 
     // Set the fixed width for the table view
-    tableView->setFixedWidth(900);
+    tableView->setFixedWidth(930);
 
     // Calculate the width for each column based on the table width and number of columns
     int columnCount = model->columnCount();
-    int columnWidth =tableView->width() / (columnCount-1);
+    int columnWidth =(tableView->width()-29.55) / (10);
 
     // Set each column to have the same width
     for (int i = 0; i < columnCount; ++i) {
@@ -140,37 +140,31 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
     }
 
     // Optionally, set the section resize mode to stretch to ensure equal distribution
-    QHeaderView *header = tableView->horizontalHeader();
-    header->setSectionResizeMode(QHeaderView::Fixed); // Fixed size columns
+
 
 
     for (int row = 0; row < model->rowCount(); row++) {
 
         QModelIndex idIndex = model->index(row, 0);
-        QString equipeId = model->data(idIndex).toString();
-        // Create "Modifier" button
-        QPushButton *modifyButton = new QPushButton("Modifier");
-
-        // Set button in the "Modifier" column (column 9)
-        tableView->setIndexWidget(model->index(row, 10), modifyButton);
-       QObject:: connect(modifyButton, &QPushButton::clicked, [equipeId]() {
-        qDebug() << "test modify button:" << equipeId;
-        });
+        int equipeId = model->data(idIndex).toInt();
 
         // Create "Supprimer" button
         QPushButton *deleteButton = new QPushButton("Supprimer");
 
         // Set button in the "Supprimer" column (column 10)
-        tableView->setIndexWidget(model->index(row, 11), deleteButton);
-        QObject:: connect(deleteButton, &QPushButton::clicked, [this,equipeId]() {
+        tableView->setIndexWidget(model->index(row, 10), deleteButton);
+        QObject:: connect(deleteButton, &QPushButton::clicked, [this,equipeId,tableView,&db]() {
             qDebug() << "test delete button:" << equipeId;
+            this->deleteData(equipeId,tableView,db);
         });
+
+
     }
 
 
 }
 
-void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db) {
+void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db ) {
     QSqlQuery query;
     query.prepare("DELETE FROM EQUIPE WHERE ID = :id");
     query.bindValue(":id", id);
@@ -181,6 +175,50 @@ void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db) {
         //readData(tableView, db);
     } else {
         qDebug() << "Error deleting row:" << query.lastError().text();
+    }
+    readData(tableView,db);
+}
+
+void equipe::updateData(int id,QSqlDatabase &db)
+{
+    // Ensure the database is open
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database is not open!";
+        return;
+    }
+
+    // Prepare the update query
+    QSqlQuery query(db);
+
+    query.prepare("UPDATE EQUIPE SET "
+                  "NOM_EQUIPE = :NOM_EQUIPE, "
+                  "ENTRENEUR = :ENTRENEUR, "
+                  "NBV = :NBV, "
+                  "NBD = :NBD, "
+                  "NBP = :NBP, "
+                  "NBN = :NBN, "
+                  "DATE_C = :DATE_C, "
+                  "CATEG = :CATEG, "
+                  "EMAIL = :EMAIL "
+                  "WHERE ID = :ID");
+
+    // Bind the updated values to the placeholders
+    query.bindValue(":NOM_EQUIPE", this->nom_equipe);
+    query.bindValue(":ENTRENEUR", this->entraineur);
+    query.bindValue(":NBV", this->nb_vic);
+    query.bindValue(":NBD", this->nb_defaite);
+    query.bindValue(":NBP", this->nb_pnt);
+    query.bindValue(":NBN", this->nb_null);
+    query.bindValue(":DATE_C", this->date_creation);
+    query.bindValue(":CATEG", this->categorie);
+    query.bindValue(":EMAIL", this->email);
+    query.bindValue(":ID", id); // Bind the equipeId to identify the record to update
+
+    // Execute the query
+    if (query.exec()) {
+        qDebug() << "✅ Data updated successfully!";
+    } else {
+        qDebug() << "❌ Update failed: " << query.lastError().text();
     }
 }
 

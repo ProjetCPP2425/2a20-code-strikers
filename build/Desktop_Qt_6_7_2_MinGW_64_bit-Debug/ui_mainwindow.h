@@ -71,6 +71,7 @@ public:
     QTextEdit *categorie_2;
     QLabel *label_62;
     QTextEdit *email;
+    QTextEdit *IdTextEdit;
     QLabel *label_50;
     QPushButton *pushButton_20;
     QPushButton *pushButton_21;
@@ -364,6 +365,9 @@ public:
         email->setGeometry(QRect(20, 410, 141, 31));
         email->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);"));
+        IdTextEdit = new QTextEdit(groupBox_5);
+        IdTextEdit->setObjectName("IdTextEdit");
+        IdTextEdit->setGeometry(QRect(200, 410, 104, 31));
         label_50 = new QLabel(groupBox_2);
         label_50->setObjectName("label_50");
         label_50->setGeometry(QRect(390, 50, 151, 21));

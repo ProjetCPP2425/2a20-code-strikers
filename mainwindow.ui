@@ -636,6 +636,16 @@ text-align: center;
 color: rgb(0, 0, 0);</string>
             </property>
            </widget>
+           <widget class="QTextEdit" name="IdTextEdit">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>410</y>
+              <width>104</width>
+              <height>31</height>
+             </rect>
+            </property>
+           </widget>
           </widget>
           <widget class="QLabel" name="label_50">
            <property name="geometry">

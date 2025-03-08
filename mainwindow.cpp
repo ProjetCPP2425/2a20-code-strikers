@@ -5,9 +5,12 @@
 #include <QDebug>
 #include <QRandomGenerator>
 #include "equipe.h"
+
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+    update(false),
+    ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
 
@@ -92,9 +95,10 @@ MainWindow::MainWindow(QWidget *parent)
         "QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {"
         "    background: none;"           // Remove the background color for the add/sub page
         "}"
+
         );
 
-
+    ui->IdTextEdit->setVisible(false);
 
 
 
@@ -129,24 +133,43 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_17_clicked()
 {
-
     QDate date = QDate::fromString(ui->date_c->toPlainText(), "yyyy-MM-dd");
-    int id = QRandomGenerator::global()->generate()% 9000 + 1000;
-    QString randomID = QString::number(id);
-    equipe eq(randomID,
-              ui->nom_eq->toPlainText(),
-               date,
-               ui->entreneur->toPlainText(),
-               ui->categorie_2->toPlainText(),
-               ui->nb_vict->toPlainText().toInt(),
-               ui->nb_def->toPlainText().toInt(),
-               ui->nb_null->toPlainText().toInt(),
-               ui->nb_pnt->toPlainText().toInt(),
-               ui->email->toPlainText()
-              );
-    eq.console_equipe();
-    eq.insertData(db);
-    eq.readData(ui->tableView,db);
+    if(!update)
+    {
+
+
+        equipe eq(0,
+                  ui->nom_eq->toPlainText(),
+                  date,
+                  ui->entreneur->toPlainText(),
+                  ui->categorie_2->toPlainText(),
+                  ui->nb_vict->toPlainText().toInt(),
+                  ui->nb_def->toPlainText().toInt(),
+                  ui->nb_null->toPlainText().toInt(),
+                  ui->nb_pnt->toPlainText().toInt(),
+                  ui->email->toPlainText()
+                  );
+        eq.console_equipe();
+
+        eq.insertData(db);
+        eq.readData(ui->tableView,db);
+    }else
+    {
+        equipe eq(ui->IdTextEdit->toPlainText().toInt(),
+                  ui->nom_eq->toPlainText(),
+                  date,
+                  ui->entreneur->toPlainText(),
+                  ui->categorie_2->toPlainText(),
+                  ui->nb_vict->toPlainText().toInt(),
+                  ui->nb_def->toPlainText().toInt(),
+                  ui->nb_null->toPlainText().toInt(),
+                  ui->nb_pnt->toPlainText().toInt(),
+                  ui->email->toPlainText()
+                  );
+        eq.updateData(ui->IdTextEdit->toPlainText().toInt(),db);
+        eq.readData(ui->tableView,db);
+    }
+
 
 
 }
@@ -157,6 +180,64 @@ void MainWindow::on_pushButton_17_clicked()
 //cancel button
 void MainWindow::on_pushButton_19_clicked()
 {
+    QDate date = QDate::fromString(ui->date_c->toPlainText(), "yyyy-MM-dd");
+    equipe eq(ui->IdTextEdit->toPlainText().toInt(),
+              ui->nom_eq->toPlainText(),
+              date,
+              ui->entreneur->toPlainText(),
+              ui->categorie_2->toPlainText(),
+              ui->nb_vict->toPlainText().toInt(),
+              ui->nb_def->toPlainText().toInt(),
+              ui->nb_null->toPlainText().toInt(),
+              ui->nb_pnt->toPlainText().toInt(),
+              ui->email->toPlainText()
+              );
+
+    eq.updateData(eq.getId(),db);
+    eq.readData(ui->tableView,db);
+    update=false;
+}
+
+void MainWindow::setData(QString a,QString b,QString c,QString d,QString e,QString f,QString g,QString h,QString i,QString j){
+
+    ui->IdTextEdit->setPlainText(a);
+    ui->nom_eq->setPlainText(b);
+    ui->date_c->setPlainText(c);
+    ui->entreneur->setPlainText(d);
+    ui->categorie_2->setPlainText(e);
+    ui->nb_vict->setPlainText(f);
+    ui->nb_def->setPlainText(g);
+    ui->nb_null->setPlainText(h);
+    ui->nb_pnt->setPlainText(i);
+    ui->email->setPlainText(j);
+}
+
+
+
+
+
+void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    QAbstractItemModel *model = ui->tableView->model();
+    // Cast the model to QSqlTableModel for better access to the specific model features
+    int rowIndex = index.row();
+
+
+    setData(model->data(model->index(rowIndex,0)).toString(),
+            model->data(model->index(rowIndex,1)).toString(),
+            model->data(model->index(rowIndex,2)).toString(),
+            model->data(model->index(rowIndex,3)).toString(),
+            model->data(model->index(rowIndex,4)).toString(),
+            model->data(model->index(rowIndex,5)).toString(),
+            model->data(model->index(rowIndex,6)).toString(),
+            model->data(model->index(rowIndex,7)).toString(),
+            model->data(model->index(rowIndex,8)).toString(),
+            model->data(model->index(rowIndex,9)).toString()
+            );
+
+    update =true;
+
+    // Iterate through columns to get the data for the row
 
 }
 
