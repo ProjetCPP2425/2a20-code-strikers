@@ -122,6 +122,9 @@ text-align: center;
              <height>41</height>
             </rect>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>Dashboard</string>
            </property>
@@ -134,6 +137,9 @@ text-align: center;
              <width>121</width>
              <height>41</height>
             </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
             <string>Equipes</string>
@@ -148,6 +154,9 @@ text-align: center;
              <height>41</height>
             </rect>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>Touenois</string>
            </property>
@@ -160,6 +169,9 @@ text-align: center;
              <width>121</width>
              <height>41</height>
             </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
             <string>Sponsors</string>
@@ -174,6 +186,9 @@ text-align: center;
              <height>41</height>
             </rect>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>Ressources</string>
            </property>
@@ -187,6 +202,9 @@ text-align: center;
              <height>41</height>
             </rect>
            </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
+           </property>
            <property name="text">
             <string>Joeurs</string>
            </property>
@@ -199,6 +217,9 @@ text-align: center;
              <width>121</width>
              <height>41</height>
             </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
             <string>Arbitre</string>
@@ -219,10 +240,53 @@ text-align: center;
           </widget>
          </widget>
         </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QTableWidget" name="upper_menu">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
+          <column>
+           <property name="text">
+            <string>Acceuil</string>
+           </property>
+           <property name="background">
+            <color>
+             <red>0</red>
+             <green>0</green>
+             <blue>0</blue>
+            </color>
+           </property>
+           <property name="foreground">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>252</red>
+              <green>252</green>
+              <blue>252</blue>
+             </color>
+            </brush>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fonctionnalite</string>
+           </property>
+          </column>
+         </widget>
+        </item>
         <item row="1" column="1" colspan="2">
          <widget class="QGroupBox" name="groupBox_2">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
+           <string notr="true">background-color: rgb(255, 255, 255);
+background-color: rgb(244, 244, 244);</string>
           </property>
           <property name="title">
            <string/>
@@ -231,9 +295,9 @@ text-align: center;
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>40</y>
+             <y>0</y>
              <width>351</width>
-             <height>561</height>
+             <height>621</height>
             </rect>
            </property>
            <property name="styleSheet">
@@ -273,8 +337,8 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>70</y>
-              <width>81</width>
+              <y>80</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -293,26 +357,12 @@ text-align: center;
              <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
-           <widget class="QTextEdit" name="nom_eq">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>100</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
            <widget class="QLabel" name="label_43">
             <property name="geometry">
              <rect>
               <x>200</x>
-              <y>70</y>
-              <width>81</width>
+              <y>80</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -335,7 +385,7 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>150</y>
+              <y>180</y>
               <width>121</width>
               <height>21</height>
              </rect>
@@ -359,7 +409,7 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>200</x>
-              <y>150</y>
+              <y>180</y>
               <width>121</width>
               <height>21</height>
              </rect>
@@ -383,8 +433,8 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>220</y>
-              <width>111</width>
+              <y>280</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -407,8 +457,8 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>200</x>
-              <y>220</y>
-              <width>141</width>
+              <y>280</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -421,7 +471,7 @@ text-align: center;
 </string>
             </property>
             <property name="text">
-             <string>Nombre de matche Nulls</string>
+             <string>matche Nulls</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -431,8 +481,8 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>290</y>
-              <width>111</width>
+              <y>370</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -455,7 +505,7 @@ text-align: center;
             <property name="geometry">
              <rect>
               <x>200</x>
-              <y>290</y>
+              <y>370</y>
               <width>91</width>
               <height>21</height>
              </rect>
@@ -478,8 +528,8 @@ text-align: center;
            <widget class="QPushButton" name="pushButton_17">
             <property name="geometry">
              <rect>
-              <x>40</x>
-              <y>460</y>
+              <x>20</x>
+              <y>570</y>
               <width>111</width>
               <height>41</height>
              </rect>
@@ -488,122 +538,12 @@ text-align: center;
              <string>OK</string>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_19">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>460</y>
-              <width>121</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>Cancel</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="entreneur">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>100</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="nb_vict">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>180</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="nb_def">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>180</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="nb_pnt">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>250</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="nb_null">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>250</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="date_c">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>330</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
-            </property>
-           </widget>
-           <widget class="QTextEdit" name="categorie_2">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>330</y>
-              <width>141</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);</string>
-            </property>
-           </widget>
            <widget class="QLabel" name="label_62">
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>380</y>
-              <width>111</width>
+              <y>470</y>
+              <width>121</width>
               <height>21</height>
              </rect>
             </property>
@@ -622,11 +562,35 @@ text-align: center;
              <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
-           <widget class="QTextEdit" name="email">
+           <widget class="QTextEdit" name="IdTextEdit">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>580</y>
+              <width>104</width>
+              <height>31</height>
+             </rect>
+            </property>
+           </widget>
+           <widget class="QDateEdit" name="date_c">
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>410</y>
+              <y>390</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QComboBox" name="categorie_2">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>390</y>
               <width>141</width>
               <height>31</height>
              </rect>
@@ -634,6 +598,232 @@ text-align: center;
             <property name="styleSheet">
              <string notr="true">background-color: rgb(255, 255, 255);
 color: rgb(0, 0, 0);</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>Sinior</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Junior</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string/>
+             </property>
+            </item>
+           </widget>
+           <widget class="QLabel" name="nom_err">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>140</y>
+              <width>151</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 1, 1);
+</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="email_2">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>490</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="nom_eq_2">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>101</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="entreneur_2">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>100</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="nb_vict_2">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>200</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="nb_def_2">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>200</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="nb_pnt_2">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>300</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLineEdit" name="nb_null_2">
+            <property name="geometry">
+             <rect>
+              <x>200</x>
+              <y>300</y>
+              <width>121</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="entreneur_err">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>140</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="victoire_err">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>240</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="def_err">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>240</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="pnt_err">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>340</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="null_err">
+            <property name="geometry">
+             <rect>
+              <x>210</x>
+              <y>340</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QLabel" name="email_err">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>530</y>
+              <width>101</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </widget>
@@ -647,14 +837,14 @@ color: rgb(0, 0, 0);</string>
             </rect>
            </property>
            <property name="text">
-            <string>Rechercher un Tournois</string>
+            <string>Trier</string>
            </property>
           </widget>
           <widget class="QPushButton" name="pushButton_20">
            <property name="geometry">
             <rect>
              <x>420</x>
-             <y>400</y>
+             <y>440</y>
              <width>141</width>
              <height>41</height>
             </rect>
@@ -670,8 +860,8 @@ color: rgb(255, 255, 255);</string>
           <widget class="QPushButton" name="pushButton_21">
            <property name="geometry">
             <rect>
-             <x>640</x>
-             <y>400</y>
+             <x>630</x>
+             <y>440</y>
              <width>121</width>
              <height>41</height>
             </rect>
@@ -685,49 +875,34 @@ background-color: rgb(0, 0, 0);</string>
             <string>ID Equipe</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton_22">
-           <property name="geometry">
-            <rect>
-             <x>760</x>
-             <y>400</y>
-             <width>121</width>
-             <height>41</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(104, 255, 23);
-color: rgb(255, 255, 255);</string>
-           </property>
-           <property name="text">
-            <string>Supprimer</string>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="pushButton_23">
-           <property name="geometry">
-            <rect>
-             <x>1030</x>
-             <y>400</y>
-             <width>121</width>
-             <height>41</height>
-            </rect>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: rgb(104, 255, 23);
-color: rgb(255, 255, 255);</string>
-           </property>
-           <property name="text">
-            <string>Modifier</string>
-           </property>
-          </widget>
           <widget class="QComboBox" name="comboBox_3">
            <property name="geometry">
             <rect>
              <x>560</x>
              <y>50</y>
-             <width>69</width>
+             <width>121</width>
              <height>22</height>
             </rect>
            </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>Nombre De Points</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Categorie</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Date De Creation</string>
+            </property>
+           </item>
           </widget>
           <widget class="QLabel" name="label_51">
            <property name="geometry">
@@ -742,21 +917,11 @@ color: rgb(255, 255, 255);</string>
             <string>Rechercher un Tournois</string>
            </property>
           </widget>
-          <widget class="QComboBox" name="comboBox_4">
-           <property name="geometry">
-            <rect>
-             <x>880</x>
-             <y>50</y>
-             <width>69</width>
-             <height>22</height>
-            </rect>
-           </property>
-          </widget>
           <widget class="QPushButton" name="pushButton_39">
            <property name="geometry">
             <rect>
-             <x>1150</x>
-             <y>400</y>
+             <x>750</x>
+             <y>440</y>
              <width>121</width>
              <height>41</height>
             </rect>
@@ -922,7 +1087,7 @@ background-color: rgb(0, 0, 0);</string>
            <property name="geometry">
             <rect>
              <x>380</x>
-             <y>100</y>
+             <y>140</y>
              <width>1011</width>
              <height>261</height>
             </rect>
@@ -931,48 +1096,63 @@ background-color: rgb(0, 0, 0);</string>
             <string notr="true">color: rgb(0, 0, 0);</string>
            </property>
           </widget>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QTableWidget" name="upper_menu">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>100</height>
-           </size>
-          </property>
-          <column>
-           <property name="text">
-            <string>Acceuil</string>
+          <widget class="QComboBox" name="comboBox_5">
+           <property name="geometry">
+            <rect>
+             <x>1010</x>
+             <y>50</y>
+             <width>101</width>
+             <height>22</height>
+            </rect>
            </property>
-           <property name="background">
-            <color>
-             <red>0</red>
-             <green>0</green>
-             <blue>0</blue>
-            </color>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);</string>
            </property>
-           <property name="foreground">
-            <brush brushstyle="SolidPattern">
-             <color alpha="255">
-              <red>252</red>
-              <green>252</green>
-              <blue>252</blue>
-             </color>
-            </brush>
+           <item>
+            <property name="text">
+             <string>Nom Equipe</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Entreneur</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Id</string>
+            </property>
+           </item>
+          </widget>
+          <widget class="QLineEdit" name="nb_vict_3">
+           <property name="geometry">
+            <rect>
+             <x>430</x>
+             <y>50</y>
+             <width>121</width>
+             <height>31</height>
+            </rect>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Fonctionnalite</string>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
            </property>
-          </column>
+          </widget>
+          <widget class="QLineEdit" name="nb_vict_4">
+           <property name="geometry">
+            <rect>
+             <x>860</x>
+             <y>50</y>
+             <width>121</width>
+             <height>31</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);</string>
+           </property>
+          </widget>
          </widget>
         </item>
        </layout>

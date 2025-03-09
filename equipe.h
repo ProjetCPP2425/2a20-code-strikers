@@ -10,15 +10,20 @@
 #include <QtCore>
 #include <QSqlTableModel>
 #include "QSqlDatabase"
+#include "mainwindow.h"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <qstandarditemmodel.h>
 #include <QPushButton>
 #include <QObject>
+class MainWindow;
+
+
 class equipe {
+
 public:
 
-    QString id;
+    int id;
     QString nom_equipe;
     QDate date_creation;
     QString entraineur;
@@ -29,20 +34,24 @@ public:
     int nb_pnt;
     QString email;
 
+
     equipe();
 
-    equipe(QString id,QString nom_equipe, QDate date,QString entraineur,
+
+    equipe(int id,QString nom_equipe, QDate date,QString entraineur,
            QString categorie,int nb_v,int nb_defaite, int nb_null,int nb_pnt,QString Email);
+
 
     void console_equipe();
 
 
-    QString getId();
+    int getId();
     QString getNom();
     QDate getDate();
     QString getEntraineur();
     QString getCategorie();
     QString getEmail();
+    MainWindow *getUi();
     int getVic();
     int getDef();
     int getNull();
@@ -50,6 +59,8 @@ public:
     void insertData(QSqlDatabase db);
     void readData(QTableView *tableView, QSqlDatabase &db);
     void deleteData(int id ,QTableView *tableView,QSqlDatabase &db);
+    void updateData(int id,QSqlDatabase &db );
+
 
 
 };
