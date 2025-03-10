@@ -157,7 +157,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Nom</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit_2">
+      <widget class="QLineEdit" name="nom">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -165,6 +165,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <width>201</width>
          <height>28</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 0, 0);</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_2">
@@ -191,7 +194,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Lieu</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="lineEdit_4">
+      <widget class="QLineEdit" name="lieu">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -199,6 +202,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
          <width>201</width>
          <height>28</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 0, 0);</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_3">
@@ -225,7 +231,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <string>Date Debut</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit">
+      <widget class="QDateEdit" name="datedebut">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -279,7 +285,7 @@ QDateEdit::down-arrow {
         <string>Date Fin</string>
        </property>
       </widget>
-      <widget class="QDateEdit" name="dateEdit_2">
+      <widget class="QDateEdit" name="datefin">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -309,39 +315,64 @@ QDateEdit::down-arrow {
 </string>
        </property>
       </widget>
-      <widget class="QDialogButtonBox" name="buttonBox">
+      <widget class="QPushButton" name="pushButton_13">
        <property name="geometry">
         <rect>
-         <x>40</x>
+         <x>50</x>
          <y>420</y>
-         <width>167</width>
-         <height>29</height>
+         <width>91</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">QDialogButtonBox {
-    background-color: white; /* Fond du QDialogButtonBox en blanc */
+        <string notr="true">QPushButton {
+    background-color: #3498db; /* Bleu */
+    color: blue; /* Texte en blanc */
+    border-radius: 10px; /* Bords arrondis */
+    padding: 8px 15px; /* Espacement interne */
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
 }
 
-/* Style des boutons dans le QDialogButtonBox */
-QDialogButtonBox QPushButton {
-    color: black; /* Texte des boutons en noir */
-    background-color: #87CEEB; /* Fond bleu ciel clair */
-    border: 1px solid #66B3CC; /* Bordure légèrement plus foncée */
-    border-radius: 5px; /* Coins arrondis */
-    padding: 8px 16px; /* Espacement intérieur */
-    font-size: 14px; /* Taille du texte */
-}
-
-/* Effet au survol des boutons */
-QDialogButtonBox QPushButton:hover {
-    background-color: #ADD8E6; /* Bleu légèrement plus clair lors du survol */
+QPushButton:hover {
+    background-color: #2980b9; /* Bleu plus foncé au survol */
 }
 
 </string>
        </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+       <property name="text">
+        <string>ok</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton_16">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>420</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    background-color: #3498db; /* Bleu */
+    color: blue; /* Texte en blanc */
+    border-radius: 10px; /* Bords arrondis */
+    padding: 8px 15px; /* Espacement interne */
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
+}
+
+QPushButton:hover {
+    background-color: #2980b9; /* Bleu plus foncé au survol */
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string>update</string>
        </property>
       </widget>
      </widget>
@@ -766,6 +797,114 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>Modifier</string>
+      </property>
+     </widget>
+     <widget class="QTableView" name="tableView">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>170</y>
+        <width>681</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(0, 0, 0);
+color: rgb(7, 7, 7);</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="id">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>110</y>
+        <width>131</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(0, 0, 0);</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>110</y>
+        <width>81</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel {
+    color: black; /* Texte en noir */
+    font-size: 14px; /* Taille du texte */
+    font-weight: normal; /* Épaisseur normale */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>id</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_14">
+      <property name="geometry">
+       <rect>
+        <x>590</x>
+        <y>110</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #3498db; /* Bleu */
+    color: blue; /* Texte en blanc */
+    border-radius: 10px; /* Bords arrondis */
+    padding: 8px 15px; /* Espacement interne */
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
+}
+
+QPushButton:hover {
+    background-color: #2980b9; /* Bleu plus foncé au survol */
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>delete</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_15">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>110</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #3498db; /* Bleu */
+    color: blue; /* Texte en blanc */
+    border-radius: 10px; /* Bords arrondis */
+    padding: 8px 15px; /* Espacement interne */
+    font-size: 14px;
+    font-weight: bold;
+    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
+}
+
+QPushButton:hover {
+    background-color: #2980b9; /* Bleu plus foncé au survol */
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>update</string>
       </property>
      </widget>
     </widget>

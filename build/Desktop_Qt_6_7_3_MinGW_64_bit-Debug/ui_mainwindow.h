@@ -10,11 +10,9 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAbstractButton>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDateEdit>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -25,6 +23,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTableView>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
@@ -41,14 +40,15 @@ public:
     QGroupBox *groupBox;
     QTextEdit *textEdit;
     QLabel *label;
-    QLineEdit *lineEdit_2;
+    QLineEdit *nom;
     QLabel *label_2;
-    QLineEdit *lineEdit_4;
+    QLineEdit *lieu;
     QLabel *label_3;
-    QDateEdit *dateEdit;
+    QDateEdit *datedebut;
     QLabel *label_4;
-    QDateEdit *dateEdit_2;
-    QDialogButtonBox *buttonBox;
+    QDateEdit *datefin;
+    QPushButton *pushButton_13;
+    QPushButton *pushButton_16;
     QLabel *label_5;
     QPushButton *pushButton;
     QLabel *label_13;
@@ -60,6 +60,11 @@ public:
     QPushButton *pushButton_4;
     QTextEdit *textEdit_2;
     QPushButton *pushButton_5;
+    QTableView *tableView;
+    QLineEdit *id;
+    QLabel *label_6;
+    QPushButton *pushButton_14;
+    QPushButton *pushButton_15;
     QWidget *tab_2;
     QLabel *label_19;
     QPushButton *pushButton_23;
@@ -166,9 +171,10 @@ public:
 "    border-radius: 5px; /* Coins arrondis */\n"
 "}\n"
 ""));
-        lineEdit_2 = new QLineEdit(groupBox);
-        lineEdit_2->setObjectName("lineEdit_2");
-        lineEdit_2->setGeometry(QRect(10, 120, 201, 28));
+        nom = new QLineEdit(groupBox);
+        nom->setObjectName("nom");
+        nom->setGeometry(QRect(10, 120, 201, 28));
+        nom->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         label_2 = new QLabel(groupBox);
         label_2->setObjectName("label_2");
         label_2->setGeometry(QRect(10, 159, 63, 31));
@@ -181,9 +187,10 @@ public:
 "    border-radius: 5px; /* Coins arrondis */\n"
 "}\n"
 ""));
-        lineEdit_4 = new QLineEdit(groupBox);
-        lineEdit_4->setObjectName("lineEdit_4");
-        lineEdit_4->setGeometry(QRect(10, 200, 201, 28));
+        lieu = new QLineEdit(groupBox);
+        lieu->setObjectName("lieu");
+        lieu->setGeometry(QRect(10, 200, 201, 28));
+        lieu->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         label_3 = new QLabel(groupBox);
         label_3->setObjectName("label_3");
         label_3->setGeometry(QRect(10, 249, 101, 31));
@@ -196,10 +203,10 @@ public:
 "    border-radius: 5px; /* Coins arrondis */\n"
 "}\n"
 ""));
-        dateEdit = new QDateEdit(groupBox);
-        dateEdit->setObjectName("dateEdit");
-        dateEdit->setGeometry(QRect(10, 290, 201, 29));
-        dateEdit->setStyleSheet(QString::fromUtf8("QDateEdit {\n"
+        datedebut = new QDateEdit(groupBox);
+        datedebut->setObjectName("datedebut");
+        datedebut->setGeometry(QRect(10, 290, 201, 29));
+        datedebut->setStyleSheet(QString::fromUtf8("QDateEdit {\n"
 "    color: black; /* Texte en noir */\n"
 "    background-color: white; /* Fond blanc */\n"
 "    font-size: 14px; /* Taille du texte */\n"
@@ -229,10 +236,10 @@ public:
 "    border-radius: 5px; /* Coins arrondis */\n"
 "}\n"
 ""));
-        dateEdit_2 = new QDateEdit(groupBox);
-        dateEdit_2->setObjectName("dateEdit_2");
-        dateEdit_2->setGeometry(QRect(10, 370, 211, 29));
-        dateEdit_2->setStyleSheet(QString::fromUtf8("QDateEdit {\n"
+        datefin = new QDateEdit(groupBox);
+        datefin->setObjectName("datefin");
+        datefin->setGeometry(QRect(10, 370, 211, 29));
+        datefin->setStyleSheet(QString::fromUtf8("QDateEdit {\n"
 "    color: black; /* Texte en noir */\n"
 "    background-color: white; /* Fond blanc */\n"
 "    font-size: 14px; /* Taille du texte */\n"
@@ -250,30 +257,42 @@ public:
 "    image: url(:/icons/down-arrow.png); /* Ic\303\264ne personnalis\303\251e (optionnel) */\n"
 "}\n"
 ""));
-        buttonBox = new QDialogButtonBox(groupBox);
-        buttonBox->setObjectName("buttonBox");
-        buttonBox->setGeometry(QRect(40, 420, 167, 29));
-        buttonBox->setStyleSheet(QString::fromUtf8("QDialogButtonBox {\n"
-"    background-color: white; /* Fond du QDialogButtonBox en blanc */\n"
+        pushButton_13 = new QPushButton(groupBox);
+        pushButton_13->setObjectName("pushButton_13");
+        pushButton_13->setGeometry(QRect(50, 420, 91, 31));
+        pushButton_13->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #3498db; /* Bleu */\n"
+"    color: blue; /* Texte en blanc */\n"
+"    border-radius: 10px; /* Bords arrondis */\n"
+"    padding: 8px 15px; /* Espacement interne */\n"
+"    font-size: 14px;\n"
+"    font-weight: bold;\n"
+"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
 "}\n"
 "\n"
-"/* Style des boutons dans le QDialogButtonBox */\n"
-"QDialogButtonBox QPushButton {\n"
-"    color: black; /* Texte des boutons en noir */\n"
-"    background-color: #87CEEB; /* Fond bleu ciel clair */\n"
-"    border: 1px solid #66B3CC; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
-"    border-radius: 5px; /* Coins arrondis */\n"
-"    padding: 8px 16px; /* Espacement int\303\251rieur */\n"
-"    font-size: 14px; /* Taille du texte */\n"
-"}\n"
-"\n"
-"/* Effet au survol des boutons */\n"
-"QDialogButtonBox QPushButton:hover {\n"
-"    background-color: #ADD8E6; /* Bleu l\303\251g\303\250rement plus clair lors du survol */\n"
+"QPushButton:hover {\n"
+"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
 "}\n"
 "\n"
 ""));
-        buttonBox->setStandardButtons(QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok);
+        pushButton_16 = new QPushButton(groupBox);
+        pushButton_16->setObjectName("pushButton_16");
+        pushButton_16->setGeometry(QRect(170, 420, 91, 31));
+        pushButton_16->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #3498db; /* Bleu */\n"
+"    color: blue; /* Texte en blanc */\n"
+"    border-radius: 10px; /* Bords arrondis */\n"
+"    padding: 8px 15px; /* Espacement interne */\n"
+"    font-size: 14px;\n"
+"    font-weight: bold;\n"
+"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
+"}\n"
+"\n"
+""));
         label_5 = new QLabel(tab);
         label_5->setObjectName("label_5");
         label_5->setGeometry(QRect(310, 70, 171, 20));
@@ -530,6 +549,60 @@ public:
 "    box-shadow: none;\n"
 "}\n"
 ""));
+        tableView = new QTableView(tab);
+        tableView->setObjectName("tableView");
+        tableView->setGeometry(QRect(370, 170, 681, 231));
+        tableView->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+"color: rgb(7, 7, 7);"));
+        id = new QLineEdit(tab);
+        id->setObjectName("id");
+        id->setGeometry(QRect(440, 110, 131, 28));
+        id->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
+        label_6 = new QLabel(tab);
+        label_6->setObjectName("label_6");
+        label_6->setGeometry(QRect(320, 110, 81, 20));
+        label_6->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    color: black; /* Texte en noir */\n"
+"    font-size: 14px; /* Taille du texte */\n"
+"    font-weight: normal; /* \303\211paisseur normale */\n"
+"}\n"
+""));
+        pushButton_14 = new QPushButton(tab);
+        pushButton_14->setObjectName("pushButton_14");
+        pushButton_14->setGeometry(QRect(590, 110, 91, 31));
+        pushButton_14->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #3498db; /* Bleu */\n"
+"    color: blue; /* Texte en blanc */\n"
+"    border-radius: 10px; /* Bords arrondis */\n"
+"    padding: 8px 15px; /* Espacement interne */\n"
+"    font-size: 14px;\n"
+"    font-weight: bold;\n"
+"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
+"}\n"
+"\n"
+""));
+        pushButton_15 = new QPushButton(tab);
+        pushButton_15->setObjectName("pushButton_15");
+        pushButton_15->setGeometry(QRect(700, 110, 91, 31));
+        pushButton_15->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #3498db; /* Bleu */\n"
+"    color: blue; /* Texte en blanc */\n"
+"    border-radius: 10px; /* Bords arrondis */\n"
+"    padding: 8px 15px; /* Espacement interne */\n"
+"    font-size: 14px;\n"
+"    font-weight: bold;\n"
+"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
+"}\n"
+"\n"
+""));
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName("tab_2");
@@ -773,6 +846,8 @@ public:
         label_2->setText(QCoreApplication::translate("MainWindow", "Lieu", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Date Debut", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "Date Fin", nullptr));
+        pushButton_13->setText(QCoreApplication::translate("MainWindow", "ok", nullptr));
+        pushButton_16->setText(QCoreApplication::translate("MainWindow", "update", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Rechercher un Tournois :", nullptr));
         pushButton->setText(QCoreApplication::translate("MainWindow", "Valider", nullptr));
         label_13->setText(QCoreApplication::translate("MainWindow", "Trier par :", nullptr));
@@ -806,6 +881,9 @@ public:
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:14px; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt;\">Id Tournois</span></p></body></html>", nullptr));
         pushButton_5->setText(QCoreApplication::translate("MainWindow", "Modifier", nullptr));
+        label_6->setText(QCoreApplication::translate("MainWindow", "id", nullptr));
+        pushButton_14->setText(QCoreApplication::translate("MainWindow", "delete", nullptr));
+        pushButton_15->setText(QCoreApplication::translate("MainWindow", "update", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "Acceuil", nullptr));
         label_19->setText(QString());
         pushButton_23->setText(QCoreApplication::translate("MainWindow", "Statistiques ", nullptr));
