@@ -12,11 +12,13 @@ CONFIG += c++17
 SOURCES += \
     equipe.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    test.cpp
 
 HEADERS += \
     equipe.h \
-    mainwindow.h
+    mainwindow.h \
+    test.h
 
 FORMS += \
     mainwindow.ui

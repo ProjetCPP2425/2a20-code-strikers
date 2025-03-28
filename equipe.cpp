@@ -1,12 +1,13 @@
 #include "equipe.h"
 #include <QDebug>
-equipe::equipe(QString id, QString nom_equipe, QDate date_creation, QString entraineur,
+equipe::equipe(int id, QString nom_equipe, QDate date_creation, QString entraineur,
                QString categorie, int nb_vic, int nb_defaite, int nb_null,int pnt, QString email)
     : id(id), nom_equipe(nom_equipe), date_creation(date_creation), entraineur(entraineur),
-    categorie(categorie), nb_vic(nb_vic), nb_defaite(nb_defaite), nb_null(nb_null),nb_pnt(pnt), email(email) {}
+    categorie(categorie), nb_vic(nb_vic), nb_defaite(nb_defaite), nb_null(nb_null),nb_pnt(pnt), email(email),message(false) {}
+
 
 equipe::equipe() {
-    id = "";
+    id = 0;
     nom_equipe = "";
     date_creation = QDate::currentDate();  // Initialize to the current date
     nb_vic = 0;
@@ -14,9 +15,10 @@ equipe::equipe() {
     nb_null = 0;
     nb_pnt = 0;
     email = "";
+    message =false;
 }
 
-QString equipe::getId(){
+int equipe::getId(){
     return id;
 }
 
@@ -100,6 +102,7 @@ void equipe::insertData(QSqlDatabase db)
         qDebug() << "✅ Data inserted successfully!";
     } else {
         qDebug() << "❌ Insert failed: " << query.lastError().text();
+        message= true;
     }
 }
 
@@ -110,67 +113,45 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
     // Set headers for the first 9 data columns
     model->setHeaderData(0, Qt::Horizontal, "ID");
     model->setHeaderData(1, Qt::Horizontal, "Nom");
-    model->setHeaderData(2, Qt::Horizontal, "Date Création");
-    model->setHeaderData(3, Qt::Horizontal, "Entraîneur");
-    model->setHeaderData(4, Qt::Horizontal, "Catégorie");
-    model->setHeaderData(5, Qt::Horizontal, "Victoires");
-    model->setHeaderData(6, Qt::Horizontal, "Défaites");
-    model->setHeaderData(7, Qt::Horizontal, "Nuls");
-    model->setHeaderData(8, Qt::Horizontal, "Points");
+    model->setHeaderData(2, Qt::Horizontal, "ENTRENEUR");
+    model->setHeaderData(3, Qt::Horizontal, "Victoire");
+    model->setHeaderData(4, Qt::Horizontal, "Defaite");
+    model->setHeaderData(5, Qt::Horizontal, "Points");
+    model->setHeaderData(6, Qt::Horizontal, "Nulls");
+    model->setHeaderData(7, Qt::Horizontal, "Date Creation");
+    model->setHeaderData(8, Qt::Horizontal, "Categorie");
     model->setHeaderData(9, Qt::Horizontal, "Email");
 
-    // Add two extra columns for buttons (Modifier, Supprimer)
-    model->insertColumn(10);
-    model->insertColumn(11);
-    model->setHeaderData(10, Qt::Horizontal, "Modifier");
-    model->setHeaderData(11, Qt::Horizontal, "Supprimer");
-    tableView->setModel(model);
+
+
+    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel();
+    proxyModel->setSourceModel(model);  // Set the query model as the source model for the proxy
+    proxyModel->setSortRole(Qt::DisplayRole);  // Set the sorting role to the display role
+
+    // Set the proxy model to the table view
+    tableView->setModel(proxyModel);
+
+    // Enable sorting (by default, QTableView allows sorting by column headers)
+    tableView->setSortingEnabled(true);
+
     tableView->setColumnHidden(0,true);
 
     // Set the fixed width for the table view
-    tableView->setFixedWidth(900);
+    tableView->setFixedWidth(930);
 
     // Calculate the width for each column based on the table width and number of columns
     int columnCount = model->columnCount();
-    int columnWidth =tableView->width() / (columnCount-1);
+    int columnWidth =(tableView->width()-29.55) / (9);
 
     // Set each column to have the same width
     for (int i = 0; i < columnCount; ++i) {
        tableView->setColumnWidth(i, columnWidth);
     }
 
-    // Optionally, set the section resize mode to stretch to ensure equal distribution
-    QHeaderView *header = tableView->horizontalHeader();
-    header->setSectionResizeMode(QHeaderView::Fixed); // Fixed size columns
-
-
-    for (int row = 0; row < model->rowCount(); row++) {
-
-        QModelIndex idIndex = model->index(row, 0);
-        QString equipeId = model->data(idIndex).toString();
-        // Create "Modifier" button
-        QPushButton *modifyButton = new QPushButton("Modifier");
-
-        // Set button in the "Modifier" column (column 9)
-        tableView->setIndexWidget(model->index(row, 10), modifyButton);
-       QObject:: connect(modifyButton, &QPushButton::clicked, [equipeId]() {
-        qDebug() << "test modify button:" << equipeId;
-        });
-
-        // Create "Supprimer" button
-        QPushButton *deleteButton = new QPushButton("Supprimer");
-
-        // Set button in the "Supprimer" column (column 10)
-        tableView->setIndexWidget(model->index(row, 11), deleteButton);
-        QObject:: connect(deleteButton, &QPushButton::clicked, [this,equipeId]() {
-            qDebug() << "test delete button:" << equipeId;
-        });
-    }
-
 
 }
 
-void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db) {
+void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db ) {
     QSqlQuery query;
     query.prepare("DELETE FROM EQUIPE WHERE ID = :id");
     query.bindValue(":id", id);
@@ -182,5 +163,95 @@ void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db) {
     } else {
         qDebug() << "Error deleting row:" << query.lastError().text();
     }
+    readData(tableView,db);
 }
+
+void equipe::updateData(int id,QSqlDatabase &db)
+{
+    // Ensure the database is open
+    if (!db.isOpen   ()) {
+        qDebug() << "❌ Database is not open!";
+        return;
+    }
+
+    // Prepare the update query
+    QSqlQuery query(db);
+
+    query.prepare("UPDATE EQUIPE SET "
+                  "NOM_EQUIPE = :NOM_EQUIPE, "
+                  "ENTRENEUR = :ENTRENEUR, "
+                  "NBV = :NBV, "
+                  "NBD = :NBD, "
+                  "NBP = :NBP, "
+                  "NBN = :NBN, "
+                  "DATE_C = :DATE_C, "
+                  "CATEG = :CATEG, "
+                  "EMAIL = :EMAIL "
+                  "WHERE ID = :ID");
+
+    // Bind the updated values to the placeholders
+    query.bindValue(":NOM_EQUIPE", this->nom_equipe);
+    query.bindValue(":ENTRENEUR", this->entraineur);
+    query.bindValue(":NBV", this->nb_vic);
+    query.bindValue(":NBD", this->nb_defaite);
+    query.bindValue(":NBP", this->nb_pnt);
+    query.bindValue(":NBN", this->nb_null);
+    query.bindValue(":DATE_C", this->date_creation);
+    query.bindValue(":CATEG", this->categorie);
+    query.bindValue(":EMAIL", this->email);
+    query.bindValue(":ID", id); // Bind the equipeId to identify the record to update
+
+    // Execute the query
+    if (query.exec()) {
+        qDebug() << "✅ Data updated successfully!";
+    } else {
+        qDebug() << "❌ Update failed: " << query.lastError().text();
+            message= true;
+    }
+}
+
+QSqlQueryModel* equipe::search(int critere, QString ID) {
+    QSqlQueryModel *model = new QSqlQueryModel();
+    QSqlQuery query;
+    if (critere == 2) {
+        bool ok;
+        int id = ID.toInt(&ok); // Convert string to int safely
+
+        if (!ok) {
+            qDebug() << "Invalid ID format: " << ID;
+            return nullptr; // Return nullptr to indicate an error
+        }
+        query.prepare("SELECT * FROM EQUIPE WHERE ID = :id");
+        query.bindValue(":id", id);
+    }else if(critere ==1)
+    {
+        query.prepare("SELECT * FROM EQUIPE WHERE ENTRENEUR = :ENTRENEUR");
+        query.bindValue(":ENTRENEUR", ID);
+    }
+    else if(critere ==0)
+    {
+        query.prepare("SELECT * FROM EQUIPE WHERE NOM_EQUIPE = :NOM_EQUIPE");
+        query.bindValue(":NOM_EQUIPE", ID);
+    }
+
+
+
+        if (query.exec()) {
+            model->setQuery(query); // Set the query result into the model
+
+            if (model->rowCount() > 0) {  // Check if any row was found
+                qDebug() << "FOUND ID:" << id;
+            } else {
+                qDebug() << "No record found for ID:" << id;
+            }
+        } else {
+            qDebug() << "Error executing search query:" << query.lastError().text();
+        }
+
+        return model; // Correctly return the model
+
+
+    return nullptr; // Return nullptr if critere is not 0
+}
+
 
