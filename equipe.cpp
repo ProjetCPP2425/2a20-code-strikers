@@ -126,6 +126,7 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
     model->setHeaderData(8, Qt::Horizontal, "Categorie");
     model->setHeaderData(9, Qt::Horizontal, "Email");
 
+<<<<<<< HEAD
 
 
     QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel();
@@ -138,6 +139,14 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
     // Enable sorting (by default, QTableView allows sorting by column headers)
     tableView->setSortingEnabled(true);
 
+=======
+    // Add two extra columns for buttons (Modifier, Supprimer)
+    model->insertColumn(10);
+
+    model->setHeaderData(10, Qt::Horizontal, "Supprimer");
+
+    tableView->setModel(model);
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
     tableView->setColumnHidden(0,true);
 
     // Set the fixed width for the table view
@@ -145,13 +154,42 @@ void equipe::readData(QTableView *tableView, QSqlDatabase &db){
 
     // Calculate the width for each column based on the table width and number of columns
     int columnCount = model->columnCount();
+<<<<<<< HEAD
     int columnWidth =(tableView->width()-29.55) / (9);
+=======
+    int columnWidth =(tableView->width()-29.55) / (10);
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 
     // Set each column to have the same width
     for (int i = 0; i < columnCount; ++i) {
        tableView->setColumnWidth(i, columnWidth);
     }
 
+<<<<<<< HEAD
+=======
+    // Optionally, set the section resize mode to stretch to ensure equal distribution
+
+
+
+    for (int row = 0; row < model->rowCount(); row++) {
+
+        QModelIndex idIndex = model->index(row, 0);
+        int equipeId = model->data(idIndex).toInt();
+
+        // Create "Supprimer" button
+        QPushButton *deleteButton = new QPushButton("Supprimer");
+
+        // Set button in the "Supprimer" column (column 10)
+        tableView->setIndexWidget(model->index(row, 10), deleteButton);
+        QObject:: connect(deleteButton, &QPushButton::clicked, [this,equipeId,tableView,&db]() {
+            qDebug() << "test delete button:" << equipeId;
+            this->deleteData(equipeId,tableView,db);
+        });
+
+
+    }
+
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 
 }
 
@@ -168,6 +206,52 @@ void equipe::deleteData(int id ,QTableView *tableView,QSqlDatabase &db ) {
         qDebug() << "Error deleting row:" << query.lastError().text();
     }
     readData(tableView,db);
+<<<<<<< HEAD
+=======
+}
+
+void equipe::updateData(int id,QSqlDatabase &db)
+{
+    // Ensure the database is open
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database is not open!";
+        return;
+    }
+
+    // Prepare the update query
+    QSqlQuery query(db);
+
+    query.prepare("UPDATE EQUIPE SET "
+                  "NOM_EQUIPE = :NOM_EQUIPE, "
+                  "ENTRENEUR = :ENTRENEUR, "
+                  "NBV = :NBV, "
+                  "NBD = :NBD, "
+                  "NBP = :NBP, "
+                  "NBN = :NBN, "
+                  "DATE_C = :DATE_C, "
+                  "CATEG = :CATEG, "
+                  "EMAIL = :EMAIL "
+                  "WHERE ID = :ID");
+
+    // Bind the updated values to the placeholders
+    query.bindValue(":NOM_EQUIPE", this->nom_equipe);
+    query.bindValue(":ENTRENEUR", this->entraineur);
+    query.bindValue(":NBV", this->nb_vic);
+    query.bindValue(":NBD", this->nb_defaite);
+    query.bindValue(":NBP", this->nb_pnt);
+    query.bindValue(":NBN", this->nb_null);
+    query.bindValue(":DATE_C", this->date_creation);
+    query.bindValue(":CATEG", this->categorie);
+    query.bindValue(":EMAIL", this->email);
+    query.bindValue(":ID", id); // Bind the equipeId to identify the record to update
+
+    // Execute the query
+    if (query.exec()) {
+        qDebug() << "✅ Data updated successfully!";
+    } else {
+        qDebug() << "❌ Update failed: " << query.lastError().text();
+    }
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 }
 
 void equipe::updateData(int id,QSqlDatabase &db)

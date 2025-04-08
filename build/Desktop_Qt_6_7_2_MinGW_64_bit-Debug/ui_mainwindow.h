@@ -65,6 +65,7 @@ public:
     QLabel *label_49;
     QPushButton *pushButton_17;
     QLabel *label_62;
+<<<<<<< HEAD
     QTextEdit *IdTextEdit;
     QDateEdit *date_c;
     QComboBox *categorie_2;
@@ -82,6 +83,10 @@ public:
     QLabel *pnt_err;
     QLabel *null_err;
     QLabel *email_err;
+=======
+    QTextEdit *email;
+    QTextEdit *IdTextEdit;
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
     QLabel *label_50;
     QPushButton *pushButton_20;
     QPushButton *pushButton_21;
@@ -328,6 +333,7 @@ public:
         categorie_2->setGeometry(QRect(200, 390, 141, 31));
         categorie_2->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);"));
+<<<<<<< HEAD
         nom_err = new QLabel(groupBox_5);
         nom_err->setObjectName("nom_err");
         nom_err->setGeometry(QRect(0, 140, 151, 21));
@@ -393,6 +399,11 @@ public:
         email_err->setObjectName("email_err");
         email_err->setGeometry(QRect(30, 530, 101, 21));
         email_err->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);"));
+=======
+        IdTextEdit = new QTextEdit(groupBox_5);
+        IdTextEdit->setObjectName("IdTextEdit");
+        IdTextEdit->setGeometry(QRect(200, 410, 104, 31));
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
         label_50 = new QLabel(groupBox_2);
         label_50->setObjectName("label_50");
         label_50->setGeometry(QRect(360, 50, 91, 21));

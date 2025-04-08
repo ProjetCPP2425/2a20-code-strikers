@@ -27,13 +27,17 @@ QT_END_NAMESPACE
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     bool update;
+<<<<<<< HEAD
     bool saisi;
     QSqlTableModel t;
     int selectedRow;
@@ -50,6 +54,12 @@ public:
     void testNBN();
     void testNBP();
     void testE();
+=======
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+    bool connectDatabase();
+    void setData(QString a,QString b,QString c,QString d,QString e,QString f,QString g,QString h,QString i,QString j);
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 
 private slots:
 
@@ -87,6 +97,10 @@ private slots:
     void on_pushButton_39_clicked();
 
     void on_pushButton_10_clicked();
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_tableView_clicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;
