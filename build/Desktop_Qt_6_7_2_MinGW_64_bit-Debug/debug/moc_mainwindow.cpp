@@ -40,6 +40,7 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "MainWindow",
     "on_pushButton_17_clicked",
     "",
+<<<<<<< HEAD
     "on_tableView_doubleClicked",
     "QModelIndex",
     "index",
@@ -78,6 +79,13 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_pushButton_12_clicked",
     "on_pushButton_40_clicked",
     "on_pushButton_13_clicked"
+=======
+    "on_pushButton_19_clicked",
+    "on_tableView_doubleClicked",
+    "QModelIndex",
+    "index",
+    "on_tableView_clicked"
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -90,7 +98,11 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
+<<<<<<< HEAD
       25,   14, // methods
+=======
+       4,   14, // methods
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -98,6 +110,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
+<<<<<<< HEAD
        1,    0,  164,    2, 0x08,    1 /* Private */,
        3,    1,  165,    2, 0x08,    2 /* Private */,
        6,    1,  168,    2, 0x08,    4 /* Private */,
@@ -123,6 +136,12 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       38,    0,  212,    2, 0x08,   36 /* Private */,
       39,    0,  213,    2, 0x08,   37 /* Private */,
       40,    0,  214,    2, 0x08,   38 /* Private */,
+=======
+       1,    0,   38,    2, 0x08,    1 /* Private */,
+       3,    0,   39,    2, 0x08,    2 /* Private */,
+       4,    1,   40,    2, 0x08,    3 /* Private */,
+       7,    1,   43,    2, 0x08,    5 /* Private */,
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 
  // slots: parameters
     QMetaType::Void,
@@ -150,6 +169,8 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 5,    6,
+    QMetaType::Void, 0x80000000 | 5,    6,
 
        0        // eod
 };
@@ -165,6 +186,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<MainWindow, std::true_type>,
         // method 'on_pushButton_17_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+<<<<<<< HEAD
         // method 'on_tableView_doubleClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>,
@@ -226,6 +248,16 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_pushButton_13_clicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
+=======
+        // method 'on_pushButton_19_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_tableView_doubleClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>,
+        // method 'on_tableView_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
     >,
     nullptr
 } };
@@ -237,6 +269,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         (void)_t;
         switch (_id) {
         case 0: _t->on_pushButton_17_clicked(); break;
+<<<<<<< HEAD
         case 1: _t->on_tableView_doubleClicked((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1]))); break;
         case 2: _t->styleSheet((*reinterpret_cast< std::add_pointer_t<QWidget*>>(_a[1]))); break;
         case 3: _t->on_comboBox_3_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
@@ -263,6 +296,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 22: _t->on_pushButton_12_clicked(); break;
         case 23: _t->on_pushButton_40_clicked(); break;
         case 24: _t->on_pushButton_13_clicked(); break;
+=======
+        case 1: _t->on_pushButton_19_clicked(); break;
+        case 2: _t->on_tableView_doubleClicked((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1]))); break;
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -298,6 +335,7 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
+<<<<<<< HEAD
         if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
         _id -= 25;
@@ -305,6 +343,15 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
         _id -= 25;
+=======
+        if (_id < 4)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 4;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 4)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 4;
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
     }
     return _id;
 }

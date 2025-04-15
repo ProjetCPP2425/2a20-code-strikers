@@ -16,7 +16,10 @@
 #include <qstandarditemmodel.h>
 #include <QPushButton>
 #include <QObject>
+<<<<<<< HEAD
 #include <QMessageBox>
+=======
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 class MainWindow;
 
 
@@ -34,9 +37,17 @@ public:
     int nb_null;
     int nb_pnt;
     QString email;
+<<<<<<< HEAD
     QDate date_jeux;
     bool message;
     equipe();
+=======
+
+
+    equipe();
+
+
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
     equipe(int id,QString nom_equipe, QDate date,QString entraineur,
            QString categorie,int nb_v,int nb_defaite, int nb_null,int nb_pnt,QString Email);
 
@@ -61,7 +72,11 @@ public:
     void readData(QTableView *tableView, QSqlDatabase &db);
     void deleteData(int id ,QTableView *tableView,QSqlDatabase &db);
     void updateData(int id,QSqlDatabase &db );
+<<<<<<< HEAD
     QSqlQueryModel* search(int critere,QString id);
+=======
+
+>>>>>>> ff7121065ed14647e53859f56b943d662d3c421a
 
 
 };
