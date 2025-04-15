@@ -289,7 +289,10 @@ Makefile: ../../gestion_equipe3.pro ../../../Qt/6.7.2/mingw_64/mkspecs/win32-g++
 		../../../Qt/6.7.2/mingw_64/mkspecs/features/yacc.prf \
 		../../../Qt/6.7.2/mingw_64/mkspecs/features/lex.prf \
 		../../gestion_equipe3.pro \
+		../../../Qt/6.7.2/mingw_64/lib/Qt6Charts.prl \
+		../../../Qt/6.7.2/mingw_64/lib/Qt6OpenGLWidgets.prl \
 		../../../Qt/6.7.2/mingw_64/lib/Qt6Widgets.prl \
+		../../../Qt/6.7.2/mingw_64/lib/Qt6OpenGL.prl \
 		../../../Qt/6.7.2/mingw_64/lib/Qt6Gui.prl \
 		../../../Qt/6.7.2/mingw_64/lib/Qt6Sql.prl \
 		../../../Qt/6.7.2/mingw_64/lib/Qt6Core.prl \
@@ -515,7 +518,10 @@ Makefile: ../../gestion_equipe3.pro ../../../Qt/6.7.2/mingw_64/mkspecs/win32-g++
 ../../../Qt/6.7.2/mingw_64/mkspecs/features/yacc.prf:
 ../../../Qt/6.7.2/mingw_64/mkspecs/features/lex.prf:
 ../../gestion_equipe3.pro:
+../../../Qt/6.7.2/mingw_64/lib/Qt6Charts.prl:
+../../../Qt/6.7.2/mingw_64/lib/Qt6OpenGLWidgets.prl:
 ../../../Qt/6.7.2/mingw_64/lib/Qt6Widgets.prl:
+../../../Qt/6.7.2/mingw_64/lib/Qt6OpenGL.prl:
 ../../../Qt/6.7.2/mingw_64/lib/Qt6Gui.prl:
 ../../../Qt/6.7.2/mingw_64/lib/Qt6Sql.prl:
 ../../../Qt/6.7.2/mingw_64/lib/Qt6Core.prl:

@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCalendarWidget>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDateEdit>
@@ -28,6 +29,7 @@
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -40,6 +42,7 @@ public:
     QStackedWidget *stackedWidget;
     QWidget *page;
     QGridLayout *gridLayout_2;
+    QTableWidget *upper_menu;
     QGroupBox *groupBox;
     QLabel *label;
     QPushButton *pushButton_3;
@@ -50,7 +53,6 @@ public:
     QPushButton *pushButton_8;
     QPushButton *pushButton_9;
     QLabel *logo;
-    QTableWidget *upper_menu;
     QGroupBox *groupBox_2;
     QGroupBox *groupBox_5;
     QLabel *label_12;
@@ -99,11 +101,20 @@ public:
     QCheckBox *checkBox_27;
     QCheckBox *checkBox_28;
     QTableView *tableView;
-    QComboBox *comboBox_5;
-    QLineEdit *nb_vict_3;
-    QLineEdit *nb_vict_4;
+    QComboBox *search_box;
+    QLineEdit *search_field;
+    QPushButton *delete_2;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QPushButton *pushButton_11;
+    QPushButton *pushButton_12;
     QWidget *page_2;
-    QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout;
+    QCalendarWidget *calendarWidget;
+    QPushButton *pushButton_10;
+    QWidget *page_3;
+    QPushButton *pushButton_13;
+    QTableView *tableView_2;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -112,55 +123,7 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
         MainWindow->resize(1656, 808);
-        MainWindow->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
-"	background-color: rgb(0, 0, 0);\n"
-"	background-color: rgb(2, 2, 2);\n"
-"    background-color: #d0f0fd; /* Bleu ciel clair */\n"
-"    border: 2px solid #90caf9; /* Bordure bleu pastel */\n"
-"    border-radius: 10px; /* Bords arrondis */\n"
-"    padding: 10px;\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
-"    color: #1565c0; /* Texte bleu fonc\303\251 */\n"
-"}\n"
-"\n"
-"QGroupBox::title {\n"
-"     /* Fond du titre transparent */ background-color: #d0f0fd; \n"
-"    padding: 5px;\n"
-"    color: #0d47a1; /* Couleur du titre en bleu fonc\303\251 */\n"
-"    font-size: 15px;\n"
-"}\n"
-"\n"
-"QPushButton {\n"
-"    background-color: #3498db; /* Bleu */\n"
-"    color: blue; /* Texte en blanc */\n"
-"    border-radius: 10px; /* Bords arrondis */\n"
-"    padding: 8px 15px; /* Espacement interne */\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
-"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color:"
-                        " #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"    color: black; /* Texte en noir */\n"
-"    font-size: 14px; /* Taille du texte */\n"
-"    font-weight: normal; /* \303\211paisseur normale */\n"
-"}\n"
-"\n"
-"QLabel {\n"
-"    color: black; /* Texte en noir */\n"
-"    font-size: 14px; /* Taille du texte */\n"
-"    font-weight: normal; /* \303\211paisseur normale */\n"
-"}\n"
-"\n"
-"centralwidget{\n"
-"  background-color: black; \n"
-"}"));
+        MainWindow->setStyleSheet(QString::fromUtf8(""));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         centralwidget->setStyleSheet(QString::fromUtf8("padding :0px;"));
@@ -173,6 +136,27 @@ public:
         page->setObjectName("page");
         gridLayout_2 = new QGridLayout(page);
         gridLayout_2->setObjectName("gridLayout_2");
+        upper_menu = new QTableWidget(page);
+        if (upper_menu->columnCount() < 2)
+            upper_menu->setColumnCount(2);
+        QBrush brush(QColor(252, 252, 252, 255));
+        brush.setStyle(Qt::SolidPattern);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        __qtablewidgetitem->setBackground(QColor(0, 0, 0));
+        __qtablewidgetitem->setForeground(brush);
+        upper_menu->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        upper_menu->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        upper_menu->setObjectName("upper_menu");
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(upper_menu->sizePolicy().hasHeightForWidth());
+        upper_menu->setSizePolicy(sizePolicy);
+        upper_menu->setMaximumSize(QSize(16777215, 100));
+
+        gridLayout_2->addWidget(upper_menu, 0, 1, 1, 2);
+
         groupBox = new QGroupBox(page);
         groupBox->setObjectName("groupBox");
         groupBox->setMaximumSize(QSize(200, 16777215));
@@ -219,27 +203,6 @@ public:
         logo->setGeometry(QRect(40, 90, 91, 91));
 
         gridLayout_2->addWidget(groupBox, 0, 0, 2, 1);
-
-        upper_menu = new QTableWidget(page);
-        if (upper_menu->columnCount() < 2)
-            upper_menu->setColumnCount(2);
-        QBrush brush(QColor(252, 252, 252, 255));
-        brush.setStyle(Qt::SolidPattern);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        __qtablewidgetitem->setBackground(QColor(0, 0, 0));
-        __qtablewidgetitem->setForeground(brush);
-        upper_menu->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        upper_menu->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        upper_menu->setObjectName("upper_menu");
-        QSizePolicy sizePolicy(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(upper_menu->sizePolicy().hasHeightForWidth());
-        upper_menu->setSizePolicy(sizePolicy);
-        upper_menu->setMaximumSize(QSize(16777215, 100));
-
-        gridLayout_2->addWidget(upper_menu, 0, 1, 1, 2);
 
         groupBox_2 = new QGroupBox(page);
         groupBox_2->setObjectName("groupBox_2");
@@ -429,15 +392,17 @@ public:
         pnt_err->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);"));
         null_err = new QLabel(groupBox_5);
         null_err->setObjectName("null_err");
-        null_err->setGeometry(QRect(210, 340, 101, 21));
-        null_err->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);"));
+        null_err->setGeometry(QRect(180, 340, 131, 21));
+        null_err->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);\n"
+"color: rgb(255, 0, 0);"));
         email_err = new QLabel(groupBox_5);
         email_err->setObjectName("email_err");
         email_err->setGeometry(QRect(30, 530, 101, 21));
         email_err->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);"));
         label_50 = new QLabel(groupBox_2);
         label_50->setObjectName("label_50");
-        label_50->setGeometry(QRect(390, 50, 151, 21));
+        label_50->setGeometry(QRect(360, 50, 91, 21));
+        label_50->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         pushButton_20 = new QPushButton(groupBox_2);
         pushButton_20->setObjectName("pushButton_20");
         pushButton_20->setGeometry(QRect(420, 440, 141, 41));
@@ -454,12 +419,13 @@ public:
         comboBox_3->addItem(QString());
         comboBox_3->addItem(QString());
         comboBox_3->setObjectName("comboBox_3");
-        comboBox_3->setGeometry(QRect(560, 50, 121, 22));
+        comboBox_3->setGeometry(QRect(460, 50, 121, 22));
         comboBox_3->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);"));
         label_51 = new QLabel(groupBox_2);
         label_51->setObjectName("label_51");
-        label_51->setGeometry(QRect(710, 50, 151, 21));
+        label_51->setGeometry(QRect(590, 50, 161, 21));
+        label_51->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
         pushButton_39 = new QPushButton(groupBox_2);
         pushButton_39->setObjectName("pushButton_39");
         pushButton_39->setGeometry(QRect(750, 440, 121, 41));
@@ -468,7 +434,7 @@ public:
 "background-color: rgb(0, 0, 0);"));
         pushButton_40 = new QPushButton(groupBox_2);
         pushButton_40->setObjectName("pushButton_40");
-        pushButton_40->setGeometry(QRect(1170, 50, 121, 41));
+        pushButton_40->setGeometry(QRect(1190, 460, 121, 41));
         pushButton_40->setStyleSheet(QString::fromUtf8("background-color: rgb(104, 255, 23);\n"
 "color: rgb(255, 255, 255);\n"
 "background-color: rgb(0, 0, 0);"));
@@ -504,35 +470,67 @@ public:
         checkBox_28->setGeometry(QRect(1300, 280, 76, 20));
         tableView = new QTableView(groupBox_2);
         tableView->setObjectName("tableView");
-        tableView->setGeometry(QRect(380, 140, 1011, 261));
+        tableView->setGeometry(QRect(360, 140, 981, 261));
         tableView->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
-        comboBox_5 = new QComboBox(groupBox_2);
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->addItem(QString());
-        comboBox_5->setObjectName("comboBox_5");
-        comboBox_5->setGeometry(QRect(1010, 50, 101, 22));
-        comboBox_5->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
+        search_box = new QComboBox(groupBox_2);
+        search_box->addItem(QString());
+        search_box->addItem(QString());
+        search_box->addItem(QString());
+        search_box->setObjectName("search_box");
+        search_box->setGeometry(QRect(890, 50, 101, 22));
+        search_box->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);\n"
 "color: rgb(0, 0, 0);"));
-        nb_vict_3 = new QLineEdit(groupBox_2);
-        nb_vict_3->setObjectName("nb_vict_3");
-        nb_vict_3->setGeometry(QRect(430, 50, 121, 31));
-        nb_vict_3->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
+        search_field = new QLineEdit(groupBox_2);
+        search_field->setObjectName("search_field");
+        search_field->setGeometry(QRect(750, 50, 121, 31));
+        search_field->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
 "background-color: rgb(255, 255, 255);"));
-        nb_vict_4 = new QLineEdit(groupBox_2);
-        nb_vict_4->setObjectName("nb_vict_4");
-        nb_vict_4->setGeometry(QRect(860, 50, 121, 31));
-        nb_vict_4->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);\n"
-"background-color: rgb(255, 255, 255);"));
+        delete_2 = new QPushButton(groupBox_2);
+        delete_2->setObjectName("delete_2");
+        delete_2->setGeometry(QRect(980, 450, 93, 29));
+        pushButton = new QPushButton(groupBox_2);
+        pushButton->setObjectName("pushButton");
+        pushButton->setGeometry(QRect(1000, 50, 81, 31));
+        pushButton_2 = new QPushButton(groupBox_2);
+        pushButton_2->setObjectName("pushButton_2");
+        pushButton_2->setGeometry(QRect(1090, 50, 81, 31));
+        pushButton_11 = new QPushButton(groupBox_2);
+        pushButton_11->setObjectName("pushButton_11");
+        pushButton_11->setGeometry(QRect(980, 510, 93, 29));
+        pushButton_11->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);"));
+        pushButton_12 = new QPushButton(groupBox_2);
+        pushButton_12->setObjectName("pushButton_12");
+        pushButton_12->setGeometry(QRect(770, 510, 93, 29));
+        pushButton_12->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);"));
 
         gridLayout_2->addWidget(groupBox_2, 1, 1, 1, 2);
 
         stackedWidget->addWidget(page);
         page_2 = new QWidget();
         page_2->setObjectName("page_2");
-        gridLayout = new QGridLayout(page_2);
-        gridLayout->setObjectName("gridLayout");
+        verticalLayout = new QVBoxLayout(page_2);
+        verticalLayout->setObjectName("verticalLayout");
+        calendarWidget = new QCalendarWidget(page_2);
+        calendarWidget->setObjectName("calendarWidget");
+
+        verticalLayout->addWidget(calendarWidget);
+
+        pushButton_10 = new QPushButton(page_2);
+        pushButton_10->setObjectName("pushButton_10");
+
+        verticalLayout->addWidget(pushButton_10);
+
         stackedWidget->addWidget(page_2);
+        page_3 = new QWidget();
+        page_3->setObjectName("page_3");
+        pushButton_13 = new QPushButton(page_3);
+        pushButton_13->setObjectName("pushButton_13");
+        pushButton_13->setGeometry(QRect(1300, 100, 75, 24));
+        tableView_2 = new QTableView(page_3);
+        tableView_2->setObjectName("tableView_2");
+        tableView_2->setGeometry(QRect(500, 120, 671, 311));
+        tableView_2->setStyleSheet(QString::fromUtf8("color: rgb(255, 255, 255);"));
+        stackedWidget->addWidget(page_3);
 
         formLayout->setWidget(0, QFormLayout::SpanningRole, stackedWidget);
 
@@ -556,6 +554,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        QTableWidgetItem *___qtablewidgetitem = upper_menu->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Acceuil", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = upper_menu->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Fonctionnalite", nullptr));
         groupBox->setTitle(QString());
         label->setText(QCoreApplication::translate("MainWindow", "Menu", nullptr));
         pushButton_3->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
@@ -566,10 +568,6 @@ public:
         pushButton_8->setText(QCoreApplication::translate("MainWindow", "Joeurs", nullptr));
         pushButton_9->setText(QCoreApplication::translate("MainWindow", "Arbitre", nullptr));
         logo->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = upper_menu->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Acceuil", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = upper_menu->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("MainWindow", "Fonctionnalite", nullptr));
         groupBox_2->setTitle(QString());
         groupBox_5->setTitle(QString());
         label_12->setText(QCoreApplication::translate("MainWindow", "Ajouter equipe", nullptr));
@@ -614,10 +612,17 @@ public:
         checkBox_26->setText(QString());
         checkBox_27->setText(QString());
         checkBox_28->setText(QString());
-        comboBox_5->setItemText(0, QCoreApplication::translate("MainWindow", "Nom Equipe", nullptr));
-        comboBox_5->setItemText(1, QCoreApplication::translate("MainWindow", "Entreneur", nullptr));
-        comboBox_5->setItemText(2, QCoreApplication::translate("MainWindow", "Id", nullptr));
+        search_box->setItemText(0, QCoreApplication::translate("MainWindow", "Nom Equipe", nullptr));
+        search_box->setItemText(1, QCoreApplication::translate("MainWindow", "Entreneur", nullptr));
+        search_box->setItemText(2, QCoreApplication::translate("MainWindow", "email", nullptr));
 
+        delete_2->setText(QCoreApplication::translate("MainWindow", "SUPPRIMER", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "search", nullptr));
+        pushButton_2->setText(QCoreApplication::translate("MainWindow", "cancel", nullptr));
+        pushButton_11->setText(QCoreApplication::translate("MainWindow", "modif", nullptr));
+        pushButton_12->setText(QCoreApplication::translate("MainWindow", "Restart ", nullptr));
+        pushButton_10->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
+        pushButton_13->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
     } // retranslateUi
 
 };

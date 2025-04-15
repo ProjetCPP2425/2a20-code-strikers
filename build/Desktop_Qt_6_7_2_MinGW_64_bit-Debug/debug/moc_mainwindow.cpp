@@ -7,6 +7,8 @@
 *****************************************************************************/
 
 #include "../../../mainwindow.h"
+#include <QtGui/qtextcursor.h>
+#include <QtGui/qscreen.h>
 #include <QtCore/qmetatype.h>
 
 #include <QtCore/qtmochelpers.h>
@@ -40,7 +42,42 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "",
     "on_tableView_doubleClicked",
     "QModelIndex",
-    "index"
+    "index",
+    "styleSheet",
+    "QWidget*",
+    "um",
+    "on_comboBox_3_currentIndexChanged",
+    "on_delete_2_clicked",
+    "on_pushButton_clicked",
+    "on_pushButton_2_clicked",
+    "generatePDF",
+    "createReportHTML",
+    "on_pushButton_20_clicked",
+    "on_upper_menu_cellChanged",
+    "row",
+    "column",
+    "on_upper_menu_cellClicked",
+    "checkForMatch",
+    "std::vector<QString>",
+    "test",
+    "shuffleTeams",
+    "std::vector<QString>&",
+    "teams",
+    "Loterie",
+    "setMatches",
+    "QSqlDatabase&",
+    "db",
+    "generateHTML2",
+    "dynamicHtmlTemplate",
+    "templatePath",
+    "outputPath",
+    "refreshPdf",
+    "on_pushButton_39_clicked",
+    "on_pushButton_10_clicked",
+    "on_pushButton_11_clicked",
+    "on_pushButton_12_clicked",
+    "on_pushButton_40_clicked",
+    "on_pushButton_13_clicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -53,7 +90,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+      25,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,12 +98,58 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   26,    2, 0x08,    1 /* Private */,
-       3,    1,   27,    2, 0x08,    2 /* Private */,
+       1,    0,  164,    2, 0x08,    1 /* Private */,
+       3,    1,  165,    2, 0x08,    2 /* Private */,
+       6,    1,  168,    2, 0x08,    4 /* Private */,
+       9,    1,  171,    2, 0x08,    6 /* Private */,
+      10,    0,  174,    2, 0x08,    8 /* Private */,
+      11,    0,  175,    2, 0x08,    9 /* Private */,
+      12,    0,  176,    2, 0x08,   10 /* Private */,
+      13,    0,  177,    2, 0x08,   11 /* Private */,
+      14,    0,  178,    2, 0x08,   12 /* Private */,
+      15,    0,  179,    2, 0x08,   13 /* Private */,
+      16,    2,  180,    2, 0x08,   14 /* Private */,
+      19,    2,  185,    2, 0x08,   17 /* Private */,
+      20,    1,  190,    2, 0x08,   20 /* Private */,
+      23,    1,  193,    2, 0x08,   22 /* Private */,
+      26,    1,  196,    2, 0x08,   24 /* Private */,
+      27,    1,  199,    2, 0x08,   26 /* Private */,
+      30,    0,  202,    2, 0x08,   28 /* Private */,
+      31,    2,  203,    2, 0x08,   29 /* Private */,
+      34,    0,  208,    2, 0x08,   32 /* Private */,
+      35,    0,  209,    2, 0x08,   33 /* Private */,
+      36,    0,  210,    2, 0x08,   34 /* Private */,
+      37,    0,  211,    2, 0x08,   35 /* Private */,
+      38,    0,  212,    2, 0x08,   36 /* Private */,
+      39,    0,  213,    2, 0x08,   37 /* Private */,
+      40,    0,  214,    2, 0x08,   38 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, 0x80000000 | 4,    5,
+    QMetaType::Void, 0x80000000 | 7,    8,
+    QMetaType::Void, QMetaType::Int,    5,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   17,   18,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   17,   18,
+    0x80000000 | 21, QMetaType::Bool,   22,
+    QMetaType::Void, 0x80000000 | 24,   25,
+    QMetaType::Void, 0x80000000 | 24,   25,
+    QMetaType::Void, 0x80000000 | 28,   29,
+    QMetaType::Void,
+    QMetaType::Bool, QMetaType::QString, QMetaType::QString,   32,   33,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -84,7 +167,65 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'on_tableView_doubleClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QModelIndex &, std::false_type>,
+        // method 'styleSheet'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QWidget *, std::false_type>,
+        // method 'on_comboBox_3_currentIndexChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'on_delete_2_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_2_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'generatePDF'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'createReportHTML'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_20_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_upper_menu_cellChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'on_upper_menu_cellClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'checkForMatch'
+        QtPrivate::TypeAndForceComplete<std::vector<QString>, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        // method 'shuffleTeams'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<std::vector<QString> &, std::false_type>,
+        // method 'Loterie'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<std::vector<QString> &, std::false_type>,
+        // method 'setMatches'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QSqlDatabase &, std::false_type>,
+        // method 'generateHTML2'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'dynamicHtmlTemplate'
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        // method 'refreshPdf'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_39_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_10_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_11_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_12_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_40_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'on_pushButton_13_clicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -97,7 +238,43 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         switch (_id) {
         case 0: _t->on_pushButton_17_clicked(); break;
         case 1: _t->on_tableView_doubleClicked((*reinterpret_cast< std::add_pointer_t<QModelIndex>>(_a[1]))); break;
+        case 2: _t->styleSheet((*reinterpret_cast< std::add_pointer_t<QWidget*>>(_a[1]))); break;
+        case 3: _t->on_comboBox_3_currentIndexChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 4: _t->on_delete_2_clicked(); break;
+        case 5: _t->on_pushButton_clicked(); break;
+        case 6: _t->on_pushButton_2_clicked(); break;
+        case 7: _t->generatePDF(); break;
+        case 8: _t->createReportHTML(); break;
+        case 9: _t->on_pushButton_20_clicked(); break;
+        case 10: _t->on_upper_menu_cellChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 11: _t->on_upper_menu_cellClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 12: { std::vector<QString> _r = _t->checkForMatch((*reinterpret_cast< std::add_pointer_t<bool>>(_a[1])));
+            if (_a[0]) *reinterpret_cast< std::vector<QString>*>(_a[0]) = std::move(_r); }  break;
+        case 13: _t->shuffleTeams((*reinterpret_cast< std::add_pointer_t<std::vector<QString>&>>(_a[1]))); break;
+        case 14: _t->Loterie((*reinterpret_cast< std::add_pointer_t<std::vector<QString>&>>(_a[1]))); break;
+        case 15: _t->setMatches((*reinterpret_cast< std::add_pointer_t<QSqlDatabase&>>(_a[1]))); break;
+        case 16: _t->generateHTML2(); break;
+        case 17: { bool _r = _t->dynamicHtmlTemplate((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 18: _t->refreshPdf(); break;
+        case 19: _t->on_pushButton_39_clicked(); break;
+        case 20: _t->on_pushButton_10_clicked(); break;
+        case 21: _t->on_pushButton_11_clicked(); break;
+        case 22: _t->on_pushButton_12_clicked(); break;
+        case 23: _t->on_pushButton_40_clicked(); break;
+        case 24: _t->on_pushButton_13_clicked(); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 2:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QWidget* >(); break;
+            }
+            break;
         }
     }
 }
@@ -121,13 +298,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 25)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 25;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        if (_id < 25)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 25;
     }
     return _id;
 }

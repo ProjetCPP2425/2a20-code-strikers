@@ -1,6 +1,8 @@
-QT       += core gui
+QT       += core gui charts
 QT       += sql
 QT       += core
+INCLUDEPATH += C:/Qt/6.7.0/msvc2019_64/include/QtCharts
+LIBS += -LC:/Qt/6.7.2/mingw_64/lib -lQt6Charts
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -12,14 +14,20 @@ CONFIG += c++17
 SOURCES += \
     equipe.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    match.cpp \
+    smallwindow.cpp \
+
 
 HEADERS += \
     equipe.h \
-    mainwindow.h
+    mainwindow.h \
+    match.h \
+    smallwindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    smallwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
