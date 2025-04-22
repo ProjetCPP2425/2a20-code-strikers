@@ -38,7 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_reservationManager->setSmsSender(smsSender);
     m_reservationManager->loadTournaments(ui->comboTournois);
     m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+    ui->tableMaterielsDisponibles->hideColumn(0);
     ui->affichRES->setModel(M.afficherMateriels());
+    ui->affichRES->hideColumn(0);
     connect(ui->AjouterRES, &QPushButton::clicked, this, &MainWindow::on_ajouterButton_clicked);
     ui->affichRES->setSelectionMode(QAbstractItemView::SingleSelection); // Sélection unique
     ui->affichRES->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -103,6 +105,7 @@ void MainWindow::on_ajouterButton_clicked() {
     if (nouveauMateriel.ajouterMateriels()) {
         QMessageBox::information(this, "Succès", "Le matériel a été ajouté avec succès !");
         ui->affichRES->setModel(M.afficherMateriels());
+        m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
     } else {
         QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de l'ajout du matériel.");
     }
@@ -138,6 +141,7 @@ void MainWindow::on_pushButton_18_clicked()
         if (M.modifierMateriels(id,nom, type, quantite, etat, localisation, dateAjout)) {
             QMessageBox::information(this, "Succès", "Les données ont été modifiées avec succès.");
             ui->affichRES->setModel(M.afficherMateriels());
+            m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
         } else {
             QMessageBox::warning(this, "Erreur", "La modification a échoué.");
         }
@@ -198,6 +202,7 @@ void MainWindow::on_pushButton_15_clicked()
         if (M.supprimerMateriels( id)) {
             QMessageBox::information(this, "Succès", "Le matériel a été supprimé avec succès.");
             ui->affichRES->setModel(M.afficherMateriels());
+            m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
         } else {
             QMessageBox::warning(this, "Erreur", "La suppression a échoué.");
         }
@@ -206,13 +211,16 @@ void MainWindow::on_pushButton_15_clicked()
     }
 
 }
-void MainWindow::rechercheMaterielsAuto(const QString &text) {
+void MainWindow::rechercheMaterielsAuto(const QString &text)
+{
+    QString critere = ui->comboCritereRecherche->currentText(); // Récupère le critère sélectionné
     if (text.isEmpty()) {
-        ui->affichRES->setModel(M.afficherMateriels()); // Afficher tous les matériaux
+        ui->affichRES->setModel(M.afficherMateriels()); // Tous les matériels
     } else {
-        ui->affichRES->setModel(M.rechercherMateriels(text)); // Rechercher par nom
+        ui->affichRES->setModel(M.rechercherMaterielsParChamp(critere, text));
     }
 }
+
 void MainWindow::on_triTypeComboBox_currentIndexChanged(const QString &text)
 {
     QSqlQueryModel* model = M.trierParType(text);
@@ -435,59 +443,60 @@ void MainWindow::on_statbutton_clicked()
     for (const StatInfo &stat : stats)
     {
         QPieSeries *series = new QPieSeries();
-        QSqlQuery query(db); // Utiliser la connexion ouverte
+        QSqlQuery query(db);
 
         QString queryString = QString("SELECT %1, COUNT(*) FROM materiels GROUP BY %1").arg(stat.field);
 
         if (query.exec(queryString)) {
+            int total = 0;
+            QMap<QString, int> data;
+
+            // Récupération des données
             while (query.next()) {
                 QString label = query.value(0).toString();
                 int count = query.value(1).toInt();
                 if (!label.isEmpty()) {
-                    QPieSlice *slice = series->append(QString("%1 (%2)").arg(label).arg(count), count);
-                    slice->setLabelVisible(true);
-                    slice->setExploded(true);
+                    data[label] = count;
+                    total += count;
                 }
             }
-        } else {
-            QMessageBox::warning(this, "Erreur",
-                                 QString("Erreur dans la requête SQL (%1):\n%2")
-                                     .arg(stat.field)
-                                     .arg(query.lastError().text()));
-            continue;
+
+            // Ajout des tranches avec pourcentages
+            int colorIndex = 0;
+            for (auto it = data.begin(); it != data.end(); ++it) {
+                QString label = it.key();
+                int count = it.value();
+                double percentage = (double)count / total * 100.0;
+
+                QPieSlice *slice = series->append(QString("%1 (%2%)").arg(label).arg(percentage, 0, 'f', 1), count);
+                slice->setLabelVisible();
+                slice->setLabelColor(Qt::black);
+                slice->setBrush(QColor(colors[colorIndex % colors.size()]));
+                colorIndex++;
+            }
+
+            // Création du graphique
+            QChart *chart = new QChart();
+            chart->addSeries(series);
+            chart->setTitle(stat.title);
+            chart->legend()->setVisible(true);
+            chart->legend()->setAlignment(Qt::AlignRight);
+
+            QChartView *chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+
+            // Ajout dans un onglet
+            tabWidget->addTab(chartView, stat.title);
         }
-
-        // Application des couleurs
-        for (int i = 0; i < series->slices().count(); ++i) {
-            series->slices().at(i)->setColor(QColor(colors[i % colors.size()]));
-        }
-
-        // Configuration du graphique
-        QChart *chart = new QChart();
-        chart->addSeries(series);
-        chart->setTitle(stat.title);
-        chart->setTitleFont(QFont("Segoe UI", 14, QFont::Bold));
-        chart->legend()->setVisible(true);
-        chart->legend()->setAlignment(Qt::AlignBottom);
-
-        QChartView *chartView = new QChartView(chart);
-        chartView->setRenderHint(QPainter::Antialiasing);
-
-        // Création de l'onglet
-        QWidget *tab = new QWidget();
-        QVBoxLayout *layout = new QVBoxLayout(tab);
-        layout->addWidget(chartView);
-        tab->setLayout(layout);
-
-        tabWidget->addTab(tab, stat.title);
     }
 
     // 5. Affichage de la boîte de dialogue
-    QVBoxLayout *dialogLayout = new QVBoxLayout(dialog);
-    dialogLayout->addWidget(tabWidget);
-    dialog->setLayout(dialogLayout);
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    layout->addWidget(tabWidget);
+    dialog->setLayout(layout);
     dialog->exec();
 }
+
 void MainWindow::onReserverClicked()
 {
     if (ui->tabWidget) {
@@ -507,29 +516,51 @@ void MainWindow::onValiderReservation()
     // 2. Récupérer les données du matériel
     int row = selected.first().row();
     int equipmentId = ui->tableMaterielsDisponibles->model()->data(
-                                                                ui->tableMaterielsDisponibles->model()->index(row, 0)).toInt(); // Colonne ID
+                                                                ui->tableMaterielsDisponibles->model()->index(row, 0)).toInt();
 
-    int quantity = ui->spinQuantite_3->value(); // La QSpinBox pour la quantité
-    int tournamentId = ui->comboTournois->currentData().toInt(); // QComboBox des tournois
+    int quantity = ui->spinQuantite_3->value();
+    int tournamentId = ui->comboTournois->currentData().toInt();
 
     // 3. Demander le numéro de téléphone
     bool ok;
-    QString recipientPhone = QInputDialog::getText(this,
-                                                   "Notification SMS",
-                                                   "Entrez le numéro du client (format international +XX...):",
-                                                   QLineEdit::Normal,
-                                                   "+216", // Préfixe par défaut
-                                                   &ok);
+    QString recipientPhone = QInputDialog::getText(
+        this,
+        "Notification SMS",
+        "Entrez le numéro complet avec indicatif (+216XXXXXXXX):",
+        QLineEdit::Normal,
+        "+216", // Valeur par défaut
+        &ok
+        );
 
-    if (!ok || recipientPhone.isEmpty()) return;
+    // Validation stricte
+    if (!ok || !recipientPhone.startsWith("+216") || recipientPhone.length() != 12) {
+        QMessageBox::warning(this, "Erreur", "Format invalide. Exemple: +21626790445");
+        return;
+    }
 
     // 4. Effectuer la réservation
     if (m_reservationManager->makeReservation(tournamentId, equipmentId, quantity, recipientPhone)) {
         QMessageBox::information(this, "Succès", "Réservation confirmée avec notification SMS");
-
-        // Rafraîchir l'affichage si nécessaire
         m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+        ui->affichRES->setModel(M.afficherMateriels()); // Rafraîchir le tableau principal
+
+        ui->tabWidget->setCurrentIndex(0);
+
     } else {
         QMessageBox::critical(this, "Erreur", "Échec de la réservation");
     }
 }
+
+void MainWindow::on_btnAnnulerReservation_clicked()
+{
+    // Code pour annuler la réservation et revenir à la page d'ajout
+    if (ui->tabWidget) {
+        ui->tabWidget->setCurrentIndex(0); // Retour à l'onglet d'ajout
+    }
+}
+
+
+
+
+
+

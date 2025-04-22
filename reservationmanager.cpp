@@ -49,7 +49,7 @@ void ReservationManager::loadAvailableEquipment(QTableView *table)
     QSqlTableModel *model = new QSqlTableModel(nullptr, db);
 
     model->setTable("MONTASSAR.MATERIELS"); // Non sensible à la casse
-    model->setFilter("QUANTITE > 0");
+    model->setFilter("ETAT = 'Libre' AND QUANTITE > 0");  // Filtrer les équipements "libres" uniquement
 
     if (!model->select()) {
         qDebug() << "Erreur matériels:" << model->lastError().text();
@@ -114,6 +114,15 @@ bool ReservationManager::makeReservation(int tournamentId, int equipmentId, int 
         if (!updateQuery.exec()) {
             throw updateQuery.lastError();
         }
+        // Vérifier si la quantité est maintenant 0 et mettre à jour l'état
+        QSqlQuery stateUpdateQuery(db);
+        stateUpdateQuery.prepare("UPDATE MONTASSAR.MATERIELS SET ETAT = 'Réservé' WHERE ID = ? AND QUANTITE = 0");
+        stateUpdateQuery.addBindValue(equipmentId);
+
+        if (!stateUpdateQuery.exec()) {
+            throw stateUpdateQuery.lastError();
+        }
+
 
         if (!db.commit()) {
             throw db.lastError();

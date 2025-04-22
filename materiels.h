@@ -36,7 +36,7 @@ public:
     QSqlQueryModel* rechercherMateriels(const QString& nom);
     QSqlQueryModel* trierParType(const QString& type);
     QSqlQueryModel* trierParEtat(const QString& etat);
-
+QSqlQueryModel* rechercherMaterielsParChamp(const QString& champ, const QString& valeur);
 
 
 

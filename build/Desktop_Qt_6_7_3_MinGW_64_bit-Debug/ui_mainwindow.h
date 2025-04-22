@@ -37,12 +37,10 @@ public:
     QWidget *Acceuil;
     QLabel *label;
     QLineEdit *recherche;
-    QPushButton *pushButton;
     QLabel *label_3;
     QComboBox *triTypeComboBox;
     QPushButton *pdf_materiels;
     QPushButton *pushButton_15;
-    QPushButton *pushButton_2;
     QPushButton *btnReserver;
     QPushButton *pushButton_18;
     QGroupBox *groupBox;
@@ -74,6 +72,8 @@ public:
     QPushButton *pushButton_16;
     QComboBox *triEtatComboBox;
     QPushButton *statbutton;
+    QLabel *label_5;
+    QComboBox *comboCritereRecherche;
     QWidget *ReservationWidget;
     QGroupBox *groupBox_3;
     QPushButton *pushButton_14;
@@ -98,7 +98,6 @@ public:
     QLineEdit *spinQuantite_2;
     QPushButton *btnAnnulerReservation;
     QPushButton *btnValider;
-    QPushButton *btnRetourListe;
     QTableView *tableMaterielsDisponibles;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -123,32 +122,16 @@ public:
         Acceuil->setObjectName("Acceuil");
         label = new QLabel(Acceuil);
         label->setObjectName("label");
-        label->setGeometry(QRect(450, 40, 161, 31));
+        label->setGeometry(QRect(420, 40, 211, 31));
         recherche = new QLineEdit(Acceuil);
         recherche->setObjectName("recherche");
-        recherche->setGeometry(QRect(640, 40, 51, 31));
-        pushButton = new QPushButton(Acceuil);
-        pushButton->setObjectName("pushButton");
-        pushButton->setGeometry(QRect(720, 40, 111, 31));
-        pushButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"	background-color: rgb(0, 170, 255);\n"
-"    color: white; /* Texte en blanc */\n"
-"    border-radius: 10px; /* Bords arrondis */\n"
-"    padding: 8px 15px; /* Espacement interne */\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
-"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
-"}"));
+        recherche->setGeometry(QRect(680, 40, 91, 31));
         label_3 = new QLabel(Acceuil);
         label_3->setObjectName("label_3");
-        label_3->setGeometry(QRect(490, 100, 51, 31));
+        label_3->setGeometry(QRect(440, 100, 91, 31));
         triTypeComboBox = new QComboBox(Acceuil);
         triTypeComboBox->setObjectName("triTypeComboBox");
-        triTypeComboBox->setGeometry(QRect(560, 110, 61, 21));
+        triTypeComboBox->setGeometry(QRect(530, 110, 61, 21));
         pdf_materiels = new QPushButton(Acceuil);
         pdf_materiels->setObjectName("pdf_materiels");
         pdf_materiels->setGeometry(QRect(500, 450, 111, 31));
@@ -174,22 +157,6 @@ public:
 "    font-size: 14px;\n"
 "    font-weight: bold;\n"
 "    \n"
-"}"));
-        pushButton_2 = new QPushButton(Acceuil);
-        pushButton_2->setObjectName("pushButton_2");
-        pushButton_2->setGeometry(QRect(730, 100, 81, 31));
-        pushButton_2->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"	background-color: rgb(0, 170, 255);\n"
-"    color: white; /* Texte en blanc */\n"
-"    border-radius: 10px; /* Bords arrondis */\n"
-"    padding: 8px 15px; /* Espacement interne */\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
-"    border: 2px solid #2980b9; /* Bordure l\303\251g\303\250rement plus fonc\303\251e */\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #2980b9; /* Bleu plus fonc\303\251 au survol */\n"
 "}"));
         btnReserver = new QPushButton(Acceuil);
         btnReserver->setObjectName("btnReserver");
@@ -537,7 +504,7 @@ public:
 "}"));
         triEtatComboBox = new QComboBox(Acceuil);
         triEtatComboBox->setObjectName("triEtatComboBox");
-        triEtatComboBox->setGeometry(QRect(640, 110, 71, 21));
+        triEtatComboBox->setGeometry(QRect(750, 110, 71, 21));
         statbutton = new QPushButton(Acceuil);
         statbutton->setObjectName("statbutton");
         statbutton->setGeometry(QRect(820, 450, 121, 31));
@@ -550,6 +517,14 @@ public:
 "    font-weight: bold;\n"
 "    \n"
 "}"));
+        label_5 = new QLabel(Acceuil);
+        label_5->setObjectName("label_5");
+        label_5->setGeometry(QRect(640, 100, 91, 31));
+        comboCritereRecherche = new QComboBox(Acceuil);
+        comboCritereRecherche->addItem(QString());
+        comboCritereRecherche->addItem(QString());
+        comboCritereRecherche->setObjectName("comboCritereRecherche");
+        comboCritereRecherche->setGeometry(QRect(610, 50, 62, 22));
         tabWidget->addTab(Acceuil, QString());
         ReservationWidget = new QWidget();
         ReservationWidget->setObjectName("ReservationWidget");
@@ -826,20 +801,8 @@ public:
 "}"));
         btnValider = new QPushButton(groupBoxDetails);
         btnValider->setObjectName("btnValider");
-        btnValider->setGeometry(QRect(200, 180, 101, 31));
+        btnValider->setGeometry(QRect(370, 180, 101, 31));
         btnValider->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"	background-color: rgb(0, 255, 127);\n"
-"    color: white; /* Texte en blanc */\n"
-"    border-radius: 10px; /* Bords arrondis */\n"
-"    padding: 8px 15px; /* Espacement interne */\n"
-"    font-size: 14px;\n"
-"    font-weight: bold;\n"
-"    \n"
-"}"));
-        btnRetourListe = new QPushButton(groupBoxDetails);
-        btnRetourListe->setObjectName("btnRetourListe");
-        btnRetourListe->setGeometry(QRect(390, 180, 101, 31));
-        btnRetourListe->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "	background-color: rgb(0, 255, 127);\n"
 "    color: white; /* Texte en blanc */\n"
 "    border-radius: 10px; /* Bords arrondis */\n"
@@ -873,13 +836,11 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Rechercher des equipements :", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Rechercher des equipements par  :", nullptr));
         recherche->setText(QString());
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Chercher", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Trier par :", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Trier par :  type ", nullptr));
         pdf_materiels->setText(QCoreApplication::translate("MainWindow", "PDF", nullptr));
         pushButton_15->setText(QCoreApplication::translate("MainWindow", "Supprimer", nullptr));
-        pushButton_2->setText(QCoreApplication::translate("MainWindow", "Filtrer", nullptr));
         btnReserver->setText(QCoreApplication::translate("MainWindow", "Reservation", nullptr));
         pushButton_18->setText(QCoreApplication::translate("MainWindow", "Modifier", nullptr));
         groupBox->setTitle(QString());
@@ -916,6 +877,10 @@ public:
         label_2->setText(QString());
         pushButton_16->setText(QCoreApplication::translate("MainWindow", "Afficher", nullptr));
         statbutton->setText(QCoreApplication::translate("MainWindow", "Statstique", nullptr));
+        label_5->setText(QCoreApplication::translate("MainWindow", "Trier par :  etat", nullptr));
+        comboCritereRecherche->setItemText(0, QCoreApplication::translate("MainWindow", "Nom", nullptr));
+        comboCritereRecherche->setItemText(1, QCoreApplication::translate("MainWindow", "Localisation", nullptr));
+
         tabWidget->setTabText(tabWidget->indexOf(Acceuil), QCoreApplication::translate("MainWindow", "Acceuil", nullptr));
         groupBox_3->setTitle(QString());
         pushButton_14->setText(QCoreApplication::translate("MainWindow", "Joueurs", nullptr));
@@ -940,7 +905,6 @@ public:
         spinQuantite_2->setText(QCoreApplication::translate("MainWindow", "Tournois", nullptr));
         btnAnnulerReservation->setText(QCoreApplication::translate("MainWindow", "Annuler ", nullptr));
         btnValider->setText(QCoreApplication::translate("MainWindow", "Valider", nullptr));
-        btnRetourListe->setText(QCoreApplication::translate("MainWindow", "Retour", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(ReservationWidget), QCoreApplication::translate("MainWindow", "Fonctionnalites", nullptr));
     } // retranslateUi
 

@@ -1,3 +1,4 @@
+
 #include "materiels.h"
 #include <QString>
 #include <QDate>
@@ -173,47 +174,35 @@ bool Materiels::modifierMateriels(int id, QString nom, QString type, int quantit
 
     return true;
 }
-QSqlQueryModel* Materiels::rechercherMateriels(const QString& critere) {
+QSqlQueryModel* Materiels::rechercherMaterielsParChamp(const QString& champ, const QString& valeur) {
     QSqlQueryModel* model = new QSqlQueryModel();
-
-    // 1. Obtenir et vérifier la connexion
     QSqlDatabase db = Connection::getConnection();
+
     if (!db.isOpen() && !db.open()) {
         qDebug() << "Erreur connexion BD:" << db.lastError().text();
-        return model; // Retourne un modèle vide
-    }
-
-    // 2. Préparation de la requête avec protection SQL
-    QSqlQuery query(db);
-    QString requete = "SELECT * FROM materiels WHERE "
-                      "(Nom LIKE :critere OR "
-                      "Type LIKE :critere OR "
-                      "Etat LIKE :critere OR "
-                      "Localisation LIKE :critere)";
-
-    query.prepare(requete);
-    query.bindValue(":critere", "%" + critere + "%");
-
-    // 3. Exécution et vérification
-    if (!query.exec()) {
-        qDebug() << "Erreur recherche:" << query.lastError().text();
-        qDebug() << "Requête:" << query.lastQuery();
         return model;
     }
 
-    // 4. Configuration du modèle avec std::move pour éviter la copie
+    QString champSQL;
+
+    if (champ == "Nom") champSQL = "Nom";
+    else if (champ == "Localisation") champSQL = "Localisation";
+    else champSQL = "Nom"; // Valeur par défaut
+
+    QSqlQuery query(db);
+    QString requete = QString("SELECT * FROM MONTASSAR.MATERIELS WHERE %1 LIKE :valeur").arg(champSQL);
+    query.prepare(requete);
+    query.bindValue(":valeur", "%" + valeur + "%");
+
+    if (!query.exec()) {
+        qDebug() << "Erreur recherche:" << query.lastError().text();
+        return model;
+    }
+
     model->setQuery(std::move(query));
-
-    // 5. Définition des en-têtes (utilisez QObject::tr pour la traduction)
-    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Nom"));
-    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Type"));
-    model->setHeaderData(3, Qt::Horizontal, QObject::tr("Quantité"));
-    model->setHeaderData(4, Qt::Horizontal, QObject::tr("État"));
-    model->setHeaderData(5, Qt::Horizontal, QObject::tr("Localisation"));
-    model->setHeaderData(6, Qt::Horizontal, QObject::tr("Date Ajout"));
-
     return model;
 }
+
 QSqlQueryModel* Materiels::trierParType(const QString& type) {
     QSqlQueryModel* model = new QSqlQueryModel();
 
@@ -289,5 +278,3 @@ QSqlQueryModel* Materiels::trierParEtat(const QString& etat) {
 
     return model;
 }
-
-

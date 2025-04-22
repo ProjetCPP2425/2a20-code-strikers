@@ -47,22 +47,22 @@
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>450</x>
+         <x>420</x>
          <y>40</y>
-         <width>161</width>
+         <width>211</width>
          <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>Rechercher des equipements :</string>
+        <string>Rechercher des equipements par  :</string>
        </property>
       </widget>
       <widget class="QLineEdit" name="recherche">
        <property name="geometry">
         <rect>
-         <x>640</x>
+         <x>680</x>
          <y>40</y>
-         <width>51</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
@@ -70,51 +70,23 @@
         <string/>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton">
-       <property name="geometry">
-        <rect>
-         <x>720</x>
-         <y>40</y>
-         <width>111</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-	background-color: rgb(0, 170, 255);
-    color: white; /* Texte en blanc */
-    border-radius: 10px; /* Bords arrondis */
-    padding: 8px 15px; /* Espacement interne */
-    font-size: 14px;
-    font-weight: bold;
-    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
-}
-
-QPushButton:hover {
-    background-color: #2980b9; /* Bleu plus foncé au survol */
-}</string>
-       </property>
-       <property name="text">
-        <string>Chercher</string>
-       </property>
-      </widget>
       <widget class="QLabel" name="label_3">
        <property name="geometry">
         <rect>
-         <x>490</x>
+         <x>440</x>
          <y>100</y>
-         <width>51</width>
+         <width>91</width>
          <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>Trier par :</string>
+        <string>Trier par :  type </string>
        </property>
       </widget>
       <widget class="QComboBox" name="triTypeComboBox">
        <property name="geometry">
         <rect>
-         <x>560</x>
+         <x>530</x>
          <y>110</y>
          <width>61</width>
          <height>21</height>
@@ -169,34 +141,6 @@ QPushButton:hover {
        </property>
        <property name="text">
         <string>Supprimer</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="geometry">
-        <rect>
-         <x>730</x>
-         <y>100</y>
-         <width>81</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-	background-color: rgb(0, 170, 255);
-    color: white; /* Texte en blanc */
-    border-radius: 10px; /* Bords arrondis */
-    padding: 8px 15px; /* Espacement interne */
-    font-size: 14px;
-    font-weight: bold;
-    border: 2px solid #2980b9; /* Bordure légèrement plus foncée */
-}
-
-QPushButton:hover {
-    background-color: #2980b9; /* Bleu plus foncé au survol */
-}</string>
-       </property>
-       <property name="text">
-        <string>Filtrer</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btnReserver">
@@ -898,7 +842,7 @@ background-color: rgb(0, 0, 0);
       <widget class="QComboBox" name="triEtatComboBox">
        <property name="geometry">
         <rect>
-         <x>640</x>
+         <x>750</x>
          <y>110</y>
          <width>71</width>
          <height>21</height>
@@ -928,6 +872,39 @@ background-color: rgb(0, 0, 0);
        <property name="text">
         <string>Statstique</string>
        </property>
+      </widget>
+      <widget class="QLabel" name="label_5">
+       <property name="geometry">
+        <rect>
+         <x>640</x>
+         <y>100</y>
+         <width>91</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Trier par :  etat</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboCritereRecherche">
+       <property name="geometry">
+        <rect>
+         <x>610</x>
+         <y>50</y>
+         <width>62</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Nom</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Localisation</string>
+        </property>
+       </item>
       </widget>
      </widget>
      <widget class="QWidget" name="ReservationWidget">
@@ -1464,7 +1441,7 @@ background-color: rgb(0, 0, 0);
        <widget class="QPushButton" name="btnValider">
         <property name="geometry">
          <rect>
-          <x>200</x>
+          <x>370</x>
           <y>180</y>
           <width>101</width>
           <height>31</height>
@@ -1483,30 +1460,6 @@ background-color: rgb(0, 0, 0);
         </property>
         <property name="text">
          <string>Valider</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="btnRetourListe">
-        <property name="geometry">
-         <rect>
-          <x>390</x>
-          <y>180</y>
-          <width>101</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-	background-color: rgb(0, 255, 127);
-    color: white; /* Texte en blanc */
-    border-radius: 10px; /* Bords arrondis */
-    padding: 8px 15px; /* Espacement interne */
-    font-size: 14px;
-    font-weight: bold;
-    
-}</string>
-        </property>
-        <property name="text">
-         <string>Retour</string>
         </property>
        </widget>
       </widget>

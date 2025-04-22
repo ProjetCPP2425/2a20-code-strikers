@@ -43,6 +43,10 @@ private slots:
 
 
 
+       void on_btnAnnulerReservation_clicked();
+
+       void on_btnValider_clicked();
+
    private:
     Ui::MainWindow *ui;
     Materiels M;
