@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "connexion.h"
 #include <QMessageBox>
+#include <arduino.h>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
@@ -33,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     qDebug() << "🚀 Chargement de l'UI...";
     ui->setupUi(this);
+    db = QSqlDatabase::database("ORACLE_CONN"); // 🔥
+
     qDebug() << "✅ UI chargée !";
     // Initialisation - Adaptez les noms selon votre UI
     m_reservationManager->setSmsSender(smsSender);
@@ -64,6 +67,26 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::on_triEtatComboBox_currentIndexChanged);
     connect(ui->btnReserver, &QPushButton::clicked, this, &MainWindow::onReserverClicked);
     connect(ui->btnValider, &QPushButton::clicked, this, &MainWindow::onValiderReservation); // Adaptez le nom du bouton
+    // Connexion à Arduino
+    int ret = A.connect_arduino();
+
+    switch(ret){
+    case (0):
+        qDebug() << "Arduino connecté au port: " << A.getarduino_port_name();
+        break;
+    case (1):
+        qDebug() << "Arduino détecté mais pas ouvert.";
+        break;
+    case (-1):
+        qDebug() << "Arduino non disponible.";
+    }
+    // Dans MainWindow.cpp (après connect_arduino())
+    if (ret == 0) {
+        connect(A.getserial(), &QSerialPort::readyRead, this, &MainWindow::detecterBadge);
+    } else {
+        qDebug() << "Impossible de connecter le signal readyRead : Arduino non ouvert.";
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -556,6 +579,54 @@ void MainWindow::on_btnAnnulerReservation_clicked()
     // Code pour annuler la réservation et revenir à la page d'ajout
     if (ui->tabWidget) {
         ui->tabWidget->setCurrentIndex(0); // Retour à l'onglet d'ajout
+    }
+}
+void MainWindow::detecterBadge() {
+    if (!db.isOpen()) {
+        QMessageBox::critical(this, "Erreur", "Base de données non connectée !");
+        return;
+    }
+
+    if (!A.getserial()->isOpen()) {
+        qDebug() << "Erreur : Port Arduino non ouvert !";
+        return;
+    }
+
+    QByteArray data = A.read_from_arduino();
+    qDebug() << "Données brutes reçues :" << data.toHex();
+
+    QString idCarte = QString(data).trimmed();
+    qDebug() << "ID Carte après trim :" << idCarte;
+
+    if (idCarte.isEmpty()) {
+        qDebug() << "Aucune donnée valide reçue.";
+        return;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT \"nom\" FROM \"Joueurs\" WHERE \"ID_CARTE\" = :id");
+    query.bindValue(":id", idCarte);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL :" << query.lastError().text();
+        QMessageBox::critical(this, "Erreur", "Problème de base de données : " + query.lastError().text());
+        return;
+    }
+
+    if (query.next()) {
+        QString nomJoueur = query.value(0).toString();
+        QMessageBox::information(this, "Succès", "Joueur : " + nomJoueur);
+
+        // Envoyer au LCD
+        QString message = "Joueur: " + nomJoueur + "\n";
+        A.write_to_arduino(message.toUtf8());
+    } else {
+        qDebug() << "Aucun joueur trouvé pour ID :" << idCarte;
+        QMessageBox::warning(this, "Inconnu", "Carte non enregistrée.");
+
+        // Envoyer au LCD
+        QString message = "Carte Inconnue\n";
+        A.write_to_arduino(message.toUtf8());
     }
 }
 

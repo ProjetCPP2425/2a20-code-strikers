@@ -2,9 +2,13 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "connexion.h"
+#include <QPluginLoader>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    QPluginLoader loader("qsqloci.dll");
+    if(!loader.load())
+        qDebug() << "Erreur chargement driver:" << loader.errorString();
 
 
     MainWindow w;

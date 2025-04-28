@@ -6,6 +6,7 @@
 #include "reservationmanager.h"
 #include "sms.h"
 #include <QInputDialog>
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 
 private slots:
     void on_pushButton_16_clicked();
@@ -46,6 +48,7 @@ private slots:
        void on_btnAnnulerReservation_clicked();
 
        void on_btnValider_clicked();
+        void detecterBadge();
 
    private:
     Ui::MainWindow *ui;
@@ -53,6 +56,9 @@ private slots:
     void on_ajouterButton_clicked();
     ReservationManager *m_reservationManager;
      SmsSender *smsSender;
+    QByteArray data;
+     Arduino A;
+    QSqlDatabase db;
 };
 
 
