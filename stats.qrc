@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/statis">
+        <file>statistique.png</file>
+    </qresource>
+</RCC>

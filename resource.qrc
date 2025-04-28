@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/profilepic">
+        <file>resource.qrc</file>
+        <file>siratt.png</file>
+        <file>statistique.png</file>
+        <file>register.png</file>
+        <file>background.webp</file>
+    </qresource>
+    <qresource prefix="/logo">
+        <file>logoisar.png</file>
+        <file>logoimin.png</file>
+        <file>plus.webp</file>
+        <file>stats.jpg</file>
+        <file>pdf.png</file>
+        <file>download.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix1"/>
+    <qresource prefix="/">
+        <file>stats.qrc</file>
+    </qresource>
+</RCC>

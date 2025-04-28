@@ -1,0 +1,10 @@
+release/connection.o
+release/employee.o
+release/function.o
+release/main.o
+release/smtp.o
+release/uiemp.o
+release/qrc_resource.o
+release/qrc_search.o
+release/moc_smtp.o
+release/moc_uiemp.o

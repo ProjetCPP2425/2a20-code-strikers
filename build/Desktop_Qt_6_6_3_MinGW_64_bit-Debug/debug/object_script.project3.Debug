@@ -1,0 +1,10 @@
+debug/connection.o
+debug/employee.o
+debug/function.o
+debug/main.o
+debug/smtp.o
+debug/uiemp.o
+debug/qrc_resource.o
+debug/qrc_search.o
+debug/moc_smtp.o
+debug/moc_uiemp.o
