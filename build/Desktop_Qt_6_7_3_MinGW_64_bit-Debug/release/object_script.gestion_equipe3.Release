@@ -1,0 +1,12 @@
+release/arduino.o
+release/equipe.o
+release/main.o
+release/mainwindow.o
+release/match.o
+release/pie.o
+release/piechart.o
+release/smallwindow.o
+release/moc_mainwindow.o
+release/moc_pie.o
+release/moc_piechart.o
+release/moc_smallwindow.o

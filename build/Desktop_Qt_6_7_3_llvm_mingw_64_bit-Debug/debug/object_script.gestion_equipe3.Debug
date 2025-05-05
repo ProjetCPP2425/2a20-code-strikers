@@ -1,0 +1,12 @@
+debug/arduino.o
+debug/equipe.o
+debug/main.o
+debug/mainwindow.o
+debug/match.o
+debug/pie.o
+debug/piechart.o
+debug/smallwindow.o
+debug/moc_mainwindow.o
+debug/moc_pie.o
+debug/moc_piechart.o
+debug/moc_smallwindow.o
