@@ -1,35 +1,60 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+// Qt Core & GUI
 #include <QMainWindow>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QtCore>
 #include <QSqlTableModel>
 #include "QSqlDatabase"
-#include "QDebug"
+#include <QDebug>
 #include "QString"
-#include "QDate"
+#include <QDate>
 #include <QSortFilterProxyModel>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QProcess>
-#include <algorithm>
-#include <random>
-#include "match.h"
 #include <QTextStream>
 #include <QFile>
-#include "smallwindow.h"
 #include <QCalendar>
 #include <QtGui>
+#include <QPainter>
+#include <QPrinter>
+#include <QPalette>
+#include <QInputDialog>
+
+#include <QSystemTrayIcon>
+
+
+
+// QtCharts
 #include <QtCharts/QChart>
 #include <QtCharts/QPieSeries>
 #include <QtCharts/QChartView>
 #include <QtCharts/QPieSlice>
-#include <QPainter>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QLegend>
+#include <QtCharts/QHorizontalStackedBarSeries>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+
+// Autres bibliothèques
+#include <algorithm>
+#include <random>
+#include "match.h"
+#include "smallwindow.h"
+#include "piechart.h"
+#include "materiels.h"
+#include "reservationmanager.h"
+#include "sms.h"
+#include "arduinoo.h"
+#include "tournois.h"
+#include "qrcode.h"
 #include <QSerialPort>
 #include <QSerialPortInfo>
-#include "piechart.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Ui {
@@ -47,7 +72,7 @@ class MainWindow : public QMainWindow
 
 public:
     QSerialPort *serial;
-    bool update;
+
     bool saisi;
     QSqlTableModel t;
     int selectedRow;
@@ -72,6 +97,8 @@ public:
     void createPieChart(int v,int d,int n);
      void setupSerial();
     void readSerialData();
+     void onReserverClicked();
+     void on_qrcodeM_clicked();
 
 private slots:
 
@@ -152,10 +179,83 @@ private slots:
 
     void on_pushButton_55_clicked();
 
+
+
+    //ali//
+    void on_show12_clicked();
+    void on_AjouterRES_clicked();
+
+    void on_suppp12_clicked();
+
+    void on_affichRES_clicked(const QModelIndex &index);
+
+    void on_modifie12_clicked();
+
+    void rechercheMaterielsAuto(const QString &text);
+    void on_triTypeComboBox_currentIndexChanged(const QString &text);
+    void on_triEtatComboBox_currentIndexChanged(const QString &text);
+
+
+
+
+    void on_pdf_materiels_clicked();
+
+    void on_statbutton_clicked();
+
+
+
+    void onValiderReservation();
+
+
+    void on_btnAnnulerReservation_clicked();
+
+    void on_btnValider_clicked();
+    void detecterBadge();
+
+    void on_btnReserver_clicked();
+
+
+    //monta//
+    void on_okM_clicked();
+
+    void on_stasM_clicked();
+
+    void on_pdfM_clicked();
+
+    void on_id_2_textChanged(const QString &arg1);
+
+
+
+    void on_filtrerM_clicked();
+
+    void on_suppM_clicked();
+
+    void on_modifM_clicked();
+    void on_tableView_activated(const QModelIndex &index);
+
+
 private:
     Ui::MainWindow *ui;
      QSqlDatabase db;
     QSortFilterProxyModel *proxyModel;
+     Materiels M;
+     void on_ajouterButton_clicked();
+     ReservationManager *m_reservationManager;
+     SmsSender *smsSender;
+     QByteArray data;
+     Arduinoo A;
+
+
+     bool update;
+     int id_update;
+     tournois T;
+     QSystemTrayIcon *m_trayIcon;
+     QStringList m_upcomingEventsEnd;
+
+
+     void checkUpcomingtournoissEnd();
+     void updatetournoissButton();
+     void on_checktournoisButton_clicked();
 
 };
 #endif // MAINWINDOW_H

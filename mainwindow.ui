@@ -27,7 +27,7 @@
        <string notr="true">padding:0px;</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QGridLayout" name="gridLayout_2">
@@ -1219,8 +1219,8 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QTabWidget" name="tabWidget">
         <property name="geometry">
          <rect>
-          <x>190</x>
-          <y>10</y>
+          <x>170</x>
+          <y>-10</y>
           <width>1161</width>
           <height>711</height>
          </rect>
@@ -1507,7 +1507,7 @@ QDateEdit::down-arrow {
 </string>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton_13">
+          <widget class="QPushButton" name="okM">
            <property name="geometry">
             <rect>
              <x>80</x>
@@ -1537,58 +1537,6 @@ QPushButton:hover {
             <string>ok</string>
            </property>
           </widget>
-          <widget class="QLabel" name="label_7">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>110</y>
-             <width>191</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label_8">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>220</y>
-             <width>191</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label_9">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>410</y>
-             <width>191</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-          <widget class="QLabel" name="label_10">
-           <property name="geometry">
-            <rect>
-             <x>10</x>
-             <y>320</y>
-             <width>191</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
          </widget>
          <widget class="QLabel" name="label_6">
           <property name="geometry">
@@ -1611,7 +1559,7 @@ QPushButton:hover {
            <string>Rechercher un Tournois :</string>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_18">
+         <widget class="QPushButton" name="rechercherM">
           <property name="geometry">
            <rect>
             <x>640</x>
@@ -1662,7 +1610,7 @@ QPushButton:hover {
            <string>Trier par :</string>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_19">
+         <widget class="QPushButton" name="filtrerM">
           <property name="geometry">
            <rect>
             <x>980</x>
@@ -1814,7 +1762,7 @@ QTableWidget QHeaderView::section {
            </property>
           </column>
          </widget>
-         <widget class="QPushButton" name="pushButton_21">
+         <widget class="QPushButton" name="pdfM">
           <property name="geometry">
            <rect>
             <x>380</x>
@@ -1851,8 +1799,8 @@ QPushButton:pressed {
          <widget class="QTableView" name="tableView_2">
           <property name="geometry">
            <rect>
-            <x>370</x>
-            <y>170</y>
+            <x>340</x>
+            <y>160</y>
             <width>681</width>
             <height>231</height>
            </rect>
@@ -1896,7 +1844,7 @@ color: rgb(7, 7, 7);</string>
            <string>ID</string>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_22">
+         <widget class="QPushButton" name="suppM">
           <property name="geometry">
            <rect>
             <x>590</x>
@@ -1926,7 +1874,7 @@ QPushButton:hover {
            <string>Supprimer</string>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_23">
+         <widget class="QPushButton" name="modifM">
           <property name="geometry">
            <rect>
             <x>730</x>
@@ -1972,7 +1920,7 @@ QPushButton:hover {
            <string/>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_25">
+         <widget class="QPushButton" name="stasM">
           <property name="geometry">
            <rect>
             <x>910</x>
@@ -2028,13 +1976,13 @@ QPushButton:pressed {
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>../../../Downloads/event_planner_2A35-abdelmonam/projetevent/image/icons8-qr-code-64.png</pixmap>
+           <pixmap>../../event_planner_2A35-abdelmonam/projetevent/image/icons8-qr-code-64.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="QPushButton" name="pushButton_24">
+         <widget class="QPushButton" name="qrcodeM">
           <property name="geometry">
            <rect>
             <x>520</x>
@@ -2086,7 +2034,7 @@ QPushButton:pressed {
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>../../../Downloads/stas (4).png</pixmap>
+           <pixmap>../../stas (4).png</pixmap>
           </property>
          </widget>
          <widget class="QPushButton" name="pushButton_26">
@@ -2400,7 +2348,7 @@ QPushButton:hover {
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>../../../Downloads/475699257_1127413292009260_5552565568280010640_n (2).jpg</pixmap>
+          <pixmap>../../475699257_1127413292009260_5552565568280010640_n (2).jpg</pixmap>
          </property>
         </widget>
        </widget>
@@ -2552,7 +2500,7 @@ QPushButton:hover {
             <string>PDF</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton_36">
+          <widget class="QPushButton" name="suppp12">
            <property name="geometry">
             <rect>
              <x>890</x>
@@ -2603,7 +2551,7 @@ QPushButton:hover {
             <string>Reservation</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton_37">
+          <widget class="QPushButton" name="modifie12">
            <property name="geometry">
             <rect>
              <x>450</x>
@@ -3234,7 +3182,7 @@ background-color: rgb(0, 0, 0);
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap>../../../Downloads/475699257_1127413292009260_5552565568280010640_n (1).jpg</pixmap>
+             <pixmap>../../475699257_1127413292009260_5552565568280010640_n (1).jpg</pixmap>
             </property>
            </widget>
           </widget>
@@ -3248,7 +3196,7 @@ background-color: rgb(0, 0, 0);
             </rect>
            </property>
           </widget>
-          <widget class="QPushButton" name="pushButton_47">
+          <widget class="QPushButton" name="show12">
            <property name="geometry">
             <rect>
              <x>670</x>
@@ -3609,7 +3557,7 @@ background-color: rgb(0, 0, 0);
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap>../../../Downloads/475699257_1127413292009260_5552565568280010640_n (1).jpg</pixmap>
+             <pixmap>../../475699257_1127413292009260_5552565568280010640_n (1).jpg</pixmap>
             </property>
            </widget>
           </widget>
@@ -3923,7 +3871,7 @@ background-color: rgb(0, 0, 0);
      <x>0</x>
      <y>0</y>
      <width>1656</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

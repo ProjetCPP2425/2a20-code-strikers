@@ -1,25 +1,74 @@
+
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
-#include <QSqlError>
+#include "ui_mainwindow.h"
+#include "equipe.h"
+#include "pie.h"
+#include "arduinoo.h"
+#include "reservationmanager.h"
+#include "qrcode.h"
+
+#include <QApplication>
 #include <QPixmap>
 #include <QDebug>
+#include <QMessageBox>
 #include <QRegularExpression>
 #include <QFocusEvent>
-#include "equipe.h"
-#include <QMessageBox>
 #include <QProcess>
-#include <QtWidgets/QVBoxLayout>
-#include "pie.h"
+#include <QVBoxLayout>
+#include <QDialog>
+#include <QFileDialog>
+#include <QList>
+#include <QPrinter>
+#include <QDate>
+#include <QDateEdit>
+#include <QDesktopServices>
+#include <QDir>
+#include <QIcon>
+#include <QIntValidator>
+#include <QPalette>
+#include <QPdfWriter>
+#include <QPushButton>
+#include <QStandardPaths>
+#include <QSystemTrayIcon>
+#include <QTextDocument>
+#include <QTextStream>
+#include <QTimer>
+#include <QUrl>
+#include <QVector>
+#include <QStringList>
+#include <QLayout>
+#include <QTableView>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlDatabase>
+#include <QSqlQueryModel>
+#include <QSqlTableModel>
+
 #include <QtCharts/QChartView>
-#include <QtCharts/QLineSeries>
 #include <QtCharts/QChart>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     update(false),saisi(true),
     selectedRow(-1),sort(5),v(0),
-    ui(new Ui::MainWindow),matchesByDate()
+    ui(new Ui::MainWindow), matchesByDate(),
+    m_reservationManager(new ReservationManager(this)),
+    smsSender(new SmsSender(
+        "d451e0c6871e50231fc36066dd501381-697d944a-8b85-458e-bcae-48125a83c1d4",
+        "+447491163443",
+        this ))
+
+ // Remplace par ton vrai nom de comboBox
+
 
 {
 
@@ -28,6 +77,53 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     ui->setupUi(this);
+    connect(ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(on_tableView_activated(QModelIndex)));
+    // Ajout du QSortFilterProxyModel ici
+    proxyModel = new QSortFilterProxyModel(this); // (déclaré dans le .h)
+    proxyModel->setSourceModel(ui->tableView->model());
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    ui->tableView->setModel(proxyModel);
+    ui->tableView->setSortingEnabled(true);
+    proxyModel->sort(1, Qt::AscendingOrder); // Colonne 1
+
+    qDebug() << selectedRow;
+
+    //styleSheet(um); // ← assure-toi que `um` est bien défini
+    QString s = "ess";
+
+    v = checkForMatch(true); // ← v doit être déclaré dans la classe
+    showWindowsNotification(s);
+
+    if (!v.empty()) {
+        qDebug() << "v not empty";
+        for (auto& equipe : v) {
+            qDebug() << "Sending notification for: " << equipe;
+            showWindowsNotification(equipe);
+        }
+    } else {
+        qDebug() << "empty";
+    }
+
+    v = checkForMatch(false);
+    for (const auto& equipe : v) {
+        qDebug() << equipe;
+    }
+
+    shuffleTeams(v);
+    qDebug() << "after shuffle";
+
+    if (v.size() % 2 == 0) {
+        for (const auto& equipe : v)
+            qDebug() << equipe;
+    } else {
+        qDebug() << "need more teams for the tournaments";
+    }
+
+    displayOnCalendar();
+    refreshPdf();
+    setupSerial();
+
 
     QPixmap pix("C:/logo");
     ui->logo->setPixmap(pix);
@@ -75,80 +171,61 @@ MainWindow::MainWindow(QWidget *parent)
 
     equipe e;
     e.readData(ui->tableView,db);
+    // Initialisation - Adaptez les noms selon votre UI
+                           m_reservationManager->setSmsSender(smsSender);
+    m_reservationManager->loadTournaments(ui->comboTournois);
+    m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+    ui->tableMaterielsDisponibles->hideColumn(0);
+    ui->affichRES->setModel(M.afficherMateriels());
+    ui->affichRES->hideColumn(0);
+    connect(ui->AjouterRES, &QPushButton::clicked, this, &MainWindow::on_AjouterRES_clicked);
+    ui->affichRES->setSelectionMode(QAbstractItemView::SingleSelection); // Sélection unique
+    ui->affichRES->setSelectionBehavior(QAbstractItemView::SelectRows);
+    connect(ui->recherche, &QLineEdit::textChanged, this, &MainWindow::rechercheMaterielsAuto);
+    ui->triTypeComboBox->addItem("Tous");
+    ui->triTypeComboBox->addItem("Ballon");
+    ui->triTypeComboBox->addItem("Terrain");
+    ui->triTypeComboBox->addItem("Filet");
+    ui->triTypeComboBox->addItem("Piquet");
 
+    // Connexion du signal
+    connect(ui->triTypeComboBox, &QComboBox::currentTextChanged,
+            this, &MainWindow::on_triTypeComboBox_currentIndexChanged);
+    ui->triEtatComboBox->addItem("Tous");
+    ui->triEtatComboBox->addItem("Libre");
+    ui->triEtatComboBox->addItem("Réservé");
+    ui->triEtatComboBox->addItem("À réparer");
 
-    // Create the proxy model
-    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(ui->tableView->model());
-    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        // Connexion du signal
+        connect(ui->triEtatComboBox, &QComboBox::currentTextChanged,
+                this, &MainWindow::on_triEtatComboBox_currentIndexChanged);
 
-    // Assign proxy model to table view
-    ui->tableView->setModel(proxyModel);
-    ui->tableView->setSortingEnabled(true);
+    connect(ui->btnValider, &QPushButton::clicked, this, &MainWindow::onValiderReservation); // Adaptez le nom du bouton
 
-    // Ensure sorting on a valid column (e.g., Name column at index 1)
-    proxyModel->sort(sort, Qt::AscendingOrder);
+    // Connexion à Arduino
+    int ret = A.connect_arduino();
 
-
-    qDebug()<<selectedRow;
-    styleSheet(um);
-    //createReportHTML();
-
-    QString s ="ess";
-    v = checkForMatch(true);
-    //showWindowsNotification(s);
-    showWindowsNotification(s);
-        if(!v.empty()){
-        qDebug()<<" v not empty";
-        qDebug()<<" v not empty";
-        for ( auto& equipe : v) {
-            qDebug() << "Sending notification for: " << equipe;
-
-            /*            QProcess::startDetached("powershell", QStringList()
-                                                      << "-Command"
-                                                      << QString("New-BurntToastNotification -Text 'Reminder', '%1 a un match aujourd''hui!'")
-                                                             .arg(equipe)
-                                    );
-
-            QThread::msleep(500);  // Optional: prevents Windows from grouping notifications*/
-            qDebug()<<equipe;
-            showWindowsNotification(equipe);
-
-        }
-    }else{
-        qDebug()<<"empty";
+    switch(ret){
+    case (0):
+        qDebug() << "Arduino connecté au port: " << A.getarduino_port_name();
+        break;
+    case (1):
+        qDebug() << "Arduino détecté mais pas ouvert.";
+        break;
+    case (-1):
+        qDebug() << "Arduino non disponible.";
     }
-    v = checkForMatch(false);
-    for(const auto& equipe : v )
-    {
-        qDebug()<<equipe;
+    // Dans MainWindow.cpp (après connect_arduino())
+    if (ret == 0) {
+        connect(A.getserial(), &QSerialPort::readyRead, this, &MainWindow::detecterBadge);
+    } else {
+        qDebug() << "Impossible de connecter le signal readyRead : Arduino non ouvert.";
     }
-    shuffleTeams(v);
-    qDebug()<<"after shuffle";
-    if(v.size()%2==0)
-    for(const auto& equipe : v )
-    {
-        qDebug()<<equipe;
-    }else
-        qDebug()<<"need more teams for the tournements";
-
-   /*    QDate currentDate = QDate::currentDate();
-
-    // Specify a date to compare with (e.g., January 1, 2025)
-    QDate specificDate(2025, 1, 1);
-
-    // Compare the dates
-    if (currentDate == specificDate) {
-        qDebug() << "The dates are the same.";
-    }
-    }*/
-    displayOnCalendar();
-    refreshPdf();
-    setupSerial();
-
 
 }
+
+
+
 
 MainWindow::~MainWindow()
 {
@@ -980,7 +1057,7 @@ void MainWindow::on_pushButton_39_clicked()
     setMatches(db);
     ui->stackedWidget->setCurrentIndex(1);
     match m;
-    //ui->tableView_2->setModel(m.readMatches(db));
+    ui->tableView_2->setModel(m.readMatches(db));
     displayOnCalendar();
     refreshPdf();
 }
@@ -1360,4 +1437,860 @@ void MainWindow::on_pushButton_55_clicked()
 {
     ui->stackedWidget->setCurrentIndex(4);
 }
+void MainWindow::on_AjouterRES_clicked() {
+    QString nom = ui->nomRES->text().trimmed();
+    QString type = ui->typeComboBox->currentText();
+
+    int quantite = ui->typeRES_2->text().toInt();
+    QString etat = ui->etatComboBox->currentText();
+
+    QString localisation = ui->localisationRES->text().trimmed();
+    QDate DATE_AJOUT = ui->dateRES->date();
+
+    // Contrôle de saisie pour le nom
+    if (nom.isEmpty()) {
+        QMessageBox::warning(this, "Champ vide", "Veuillez entrer un nom.");
+        return;
+    }
+
+    QRegularExpression regex("^[A-Za-zÀ-ÿ\\s]{2,30}$");
+    if (!regex.match(nom).hasMatch()) {
+        QMessageBox::warning(this, "Nom invalide", "Le nom doit contenir uniquement des lettres et des espaces (2 à 30 caractères).");
+        return;
+    }
+
+    // Création de l'objet seulement si le nom est valide
+    Materiels nouveauMateriel;
+    nouveauMateriel.setNom(nom);
+    nouveauMateriel.setType(type);
+    nouveauMateriel.setQuantite(quantite);
+    nouveauMateriel.setEtat(etat);
+    nouveauMateriel.setLocalisation(localisation);
+    nouveauMateriel.setDATE_AJOUT(DATE_AJOUT);
+
+    if (nouveauMateriel.ajouterMateriels()) {
+        QMessageBox::information(this, "Succès", "Le matériel a été ajouté avec succès !");
+        ui->affichRES->setModel(M.afficherMateriels());
+        m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+    } else {
+        QMessageBox::critical(this, "Erreur", "Une erreur est survenue lors de l'ajout du matériel.");
+    }
+}
+
+void MainWindow::on_show12_clicked()
+{
+    ui->affichRES->setModel(M.afficherMateriels());
+}
+
+
+void MainWindow::on_modifie12_clicked()
+{
+    QModelIndexList selectedIndexes = ui->affichRES->selectionModel()->selectedIndexes();
+    if (selectedIndexes.isEmpty()) {
+        QMessageBox::warning(this, "Aucune sélection", "Veuillez sélectionner une ligne à modifier.");
+        return;
+    }
+    int id = selectedIndexes.first().data().toInt();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Confirmation", "Voulez-vous vraiment modifier ce matériel ?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        QString nom = ui->nomRES->text();
+        QString type = ui->typeComboBox->currentText();
+
+        int quantite =ui->typeRES_2->text().toInt();
+        QString etat = ui->etatComboBox->currentText();
+
+        QString localisation = ui->localisationRES->text();
+        QDate dateAjout = ui->dateRES->date();
+        if (M.modifierMateriels(id,nom, type, quantite, etat, localisation, dateAjout)) {
+            QMessageBox::information(this, "Succès", "Les données ont été modifiées avec succès.");
+            ui->affichRES->setModel(M.afficherMateriels());
+            m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+        } else {
+            QMessageBox::warning(this, "Erreur", "La modification a échoué.");
+        }
+    } else {
+        QMessageBox::information(this, "Annulé", "La modification a été annulée.");
+    }
+}
+
+
+void MainWindow::on_affichRES_clicked(const QModelIndex &index)
+{
+    if (!index.isValid()) return;
+    ui->affichRES->selectRow(index.row());
+
+    QSqlQueryModel *model = qobject_cast<QSqlQueryModel*>(ui->affichRES->model());
+    if (!model) return;
+
+    QString nom = model->data(model->index(index.row(), 1)).toString();
+    QString type = model->data(model->index(index.row(), 2)).toString();
+    int quantite = model->data(model->index(index.row(), 3)).toInt();
+    QString etat = model->data(model->index(index.row(), 4)).toString();
+    QString localisation = model->data(model->index(index.row(), 5)).toString();
+    QDate dateAjout = model->data(model->index(index.row(), 6)).toDate();
+
+    ui->nomRES->setText(nom);
+    int indexType = ui->typeComboBox->findText(type);
+    if (indexType != -1) {
+        ui->typeComboBox->setCurrentIndex(indexType);
+    }
+
+    ui->typeRES_2->setText(QString::number(quantite));
+    int indexEtat = ui->etatComboBox->findText(etat);
+    if (indexEtat != -1) {
+        ui->etatComboBox->setCurrentIndex(indexEtat);
+    }
+
+    ui->localisationRES->setText(localisation);
+    ui->dateRES->setDate(dateAjout);
+
+}
+
+
+void MainWindow::on_suppp12_clicked()
+{
+    QModelIndexList selectedIndexes = ui->affichRES->selectionModel()->selectedIndexes();
+    if (selectedIndexes.isEmpty()) {
+        QMessageBox::warning(this, "Aucune sélection", "Veuillez sélectionner une ligne à supprimer.");
+        return;
+    }
+
+    int id = selectedIndexes.first().data().toInt();
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Confirmation", "Voulez-vous vraiment supprimer ce matériel ?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        if (M.supprimerMateriels( id)) {
+            QMessageBox::information(this, "Succès", "Le matériel a été supprimé avec succès.");
+            ui->affichRES->setModel(M.afficherMateriels());
+            m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+        } else {
+            QMessageBox::warning(this, "Erreur", "La suppression a échoué.");
+        }
+    } else {
+        QMessageBox::information(this, "Annulé", "La suppression a été annulée.");
+    }
+
+}
+void MainWindow::rechercheMaterielsAuto(const QString &text)
+{
+    QString critere = ui->comboCritereRecherche->currentText(); // Récupère le critère sélectionné
+    if (text.isEmpty()) {
+        ui->affichRES->setModel(M.afficherMateriels()); // Tous les matériels
+    } else {
+        ui->affichRES->setModel(M.rechercherMaterielsParChamp(critere, text));
+    }
+}
+
+void MainWindow::on_triTypeComboBox_currentIndexChanged(const QString &text)
+{
+    QSqlQueryModel* model = M.trierParType(text);
+    if (model) {
+        ui->affichRES->setModel(model);
+    } else {
+        qDebug() << "Erreur lors du tri par type";
+    }
+}
+void MainWindow::on_triEtatComboBox_currentIndexChanged(const QString &text)
+{
+    QSqlQueryModel* model = M.trierParEtat(text);
+    if (model) {
+        ui->affichRES->setModel(model);
+    } else {
+        qDebug() << "Erreur lors du tri par état";
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+void MainWindow::on_pdf_materiels_clicked()
+{
+    QTableView* tableView = ui->affichRES; // Votre tableView pour les matériels
+
+    if (!tableView)
+    {
+        QMessageBox::critical(nullptr, "ERREUR", "Table view not found.");
+        return;
+    }
+
+    QAbstractItemModel* model = tableView->model();
+
+    if (!model)
+    {
+        QMessageBox::critical(nullptr, "ERREUR", "Model not found.");
+        return;
+    }
+
+    int rowCount = model->rowCount();
+    int columnCount = model->columnCount();
+
+    QString filePath = QFileDialog::getSaveFileName(this, "Enregistrer PDF", "Materiels.pdf", "PDF files (*.pdf)");
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filePath);
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageMargins(QMarginsF(15, 15, 15, 15));
+
+    QTextDocument document;
+    QTextCursor cursor(&document);
+    QFile file("C:/Users/ASUS/Documents/aliQT/log.png");
+    QString imageBase64;
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray imageData = file.readAll();
+        QString base64Data = QString::fromLatin1(imageData.toBase64());
+        imageBase64 = "data:image/png;base64," + base64Data;
+    } else {
+        QMessageBox::warning(this, "Erreur", "Impossible de charger l'image du logo.");
+    }
+
+
+    // Style CSS amélioré
+    QString htmlContent = "<html>\n"
+                          "<head>\n"
+                          "<meta Content=\"Text/html; charset=UTF-8\">\n"
+                          "<title>Liste des Matériels</title>\n"
+                          "<style>"
+                          "body { font-family: Arial, sans-serif; }"
+                          "table {"
+                          "   border-collapse: collapse;"
+                          "   width: 100%;"
+                          "   margin-top: 20px;"
+                          "}"
+                          "th, td {"
+                          "   border: 1px solid #dddddd;"
+                          "   text-align: left;"
+                          "   padding: 8px;"
+                          "}"
+                          "th {"
+                          "   background-color: #4CAF50;"
+                          "   color: white;"
+                          "   font-weight: bold;"
+                          "}"
+                          "tr:nth-child(even) {"
+                          "   background-color: #f2f2f2;"
+                          "}"
+                          ".header {"
+                          "   display: flex;"
+                          "   justify-content: space-between;"
+                          "   align-items: center;"
+                          "   margin-bottom: 20px;"
+                          "}"
+                          ".logo {"
+                          "   width: 80px;"
+                          "   height: auto;"
+                          "}"
+                          ".title {"
+                          "   color: #2E86C1;"
+                          "   text-align: center;"
+                          "   margin: 0;"
+                          "}"
+                          ".date {"
+                          "   text-align: right;"
+                          "   color: #7F8C8D;"
+                          "   font-size: 12px;"
+                          "}"
+                          "</style>"
+                          "</head>\n"
+                          "<body>\n"
+                          "<div class='header'>"
+                          "<img src='" + imageBase64 + "' alt='Logo' class='logo'>"
+
+                                          "<div>"
+                                          "<h1 class='title'>Liste des Matériels</h1>"
+                                          "<p class='date'>Généré le: " + QDate::currentDate().toString("dd/MM/yyyy") + "</p>"
+                                                                          "</div>"
+                                                                          "</div>"
+                                                                          "<table>\n";
+
+    // En-têtes de colonnes
+    htmlContent += "<thead><tr>";
+    for (int column = 0; column < columnCount; column++) {
+        if (!tableView->isColumnHidden(column)) {
+            QString header = model->headerData(column, Qt::Horizontal).toString();
+            htmlContent += QString("<th>%1</th>").arg(header);
+        }
+    }
+    htmlContent += "</tr></thead>\n<tbody>";
+
+    // Données des matériels
+    for (int row = 0; row < rowCount; row++) {
+        htmlContent += "<tr>";
+        for (int column = 0; column < columnCount; column++) {
+            if (!tableView->isColumnHidden(column)) {
+                QString data = model->data(model->index(row, column)).toString().simplified();
+                // Mise en forme spéciale pour l'état
+                if (model->headerData(column, Qt::Horizontal).toString() == "Etat") {
+                    QString color = (data == "Réservé") ? "#E74C3C" : "#2ECC71";
+                    data = QString("<span style='color:%1; font-weight:bold'>%2</span>").arg(color).arg(data);
+                }
+                htmlContent += QString("<td>%1</td>").arg((!data.isEmpty()) ? data : "&nbsp;");
+            }
+        }
+        htmlContent += "</tr>\n";
+    }
+
+    htmlContent += "</tbody></table>\n"
+                   "<div style='margin-top: 20px; text-align: right; font-size: 12px; color: #7F8C8D;'>"
+                   "Total: " + QString::number(rowCount) + " matériels"
+                                                 "</div>\n"
+                                                 "</body>\n"
+                                                 "</html>\n";
+
+    // Insertion du HTML et impression
+    cursor.insertHtml(htmlContent);
+
+    // Ajustement de la taille du document
+    document.setPageSize(printer.pageRect(QPrinter::Point).size());
+
+    // Impression avec contrôle des erreurs
+    document.print(&printer);
+    QMessageBox::information(this, "Succès", "PDF généré avec succès:\n" + filePath);
+
+}
+
+
+
+
+
+void MainWindow::on_statbutton_clicked()
+{
+    // 1. Vérifier la connexion à la base de données
+    QSqlDatabase db = QSqlDatabase::database();  // utilise la base déjà configurée
+
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            QMessageBox::critical(this, "Erreur", "Impossible d'ouvrir la base de données : " + db.lastError().text());
+            return;
+        }
+    }
+
+    // 2. Création du conteneur principal
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle("Statistiques des matériels");
+    dialog->resize(800, 500);
+
+    QTabWidget *tabWidget = new QTabWidget(dialog);
+
+    // 3. Définition des statistiques à afficher
+    struct StatInfo {
+        QString title;
+        QString field;
+    };
+
+    QList<StatInfo> stats = {
+        {"Répartition par Type", "Type"},
+        {"Répartition par État", "Etat"}
+    };
+
+    QStringList colors = {
+        "#ff6f61", "#6b5b95", "#88b04b", "#f7cac9",
+        "#92a8d1", "#955251", "#b565a7", "#009688",
+        "#f4b400", "#607d8b"
+    };
+
+    // 4. Génération des graphiques
+    for (const StatInfo &stat : stats)
+    {
+        QPieSeries *series = new QPieSeries();
+        QSqlQuery query(db);
+
+        QString queryString = QString("SELECT %1, COUNT(*) FROM materiels GROUP BY %1").arg(stat.field);
+
+        if (query.exec(queryString)) {
+            int total = 0;
+            QMap<QString, int> data;
+
+            // Récupération des données
+            while (query.next()) {
+                QString label = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!label.isEmpty()) {
+                    data[label] = count;
+                    total += count;
+                }
+            }
+
+            // Ajout des tranches avec pourcentages
+            int colorIndex = 0;
+            for (auto it = data.begin(); it != data.end(); ++it) {
+                QString label = it.key();
+                int count = it.value();
+                double percentage = (double)count / total * 100.0;
+
+                QPieSlice *slice = series->append(QString("%1 (%2%)").arg(label).arg(percentage, 0, 'f', 1), count);
+                slice->setLabelVisible();
+                slice->setLabelColor(Qt::black);
+                slice->setBrush(QColor(colors[colorIndex % colors.size()]));
+                colorIndex++;
+            }
+
+            // Création du graphique
+            QChart *chart = new QChart();
+            chart->addSeries(series);
+            chart->setTitle(stat.title);
+            chart->legend()->setVisible(true);
+            chart->legend()->setAlignment(Qt::AlignRight);
+
+            QChartView *chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+
+            // Ajout dans un onglet
+            tabWidget->addTab(chartView, stat.title);
+        }
+    }
+
+    // 5. Affichage de la boîte de dialogue
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    layout->addWidget(tabWidget);
+    dialog->setLayout(layout);
+    dialog->exec();
+}
+
+void MainWindow::on_btnReserver_clicked()
+{
+    if (ui->tabWidget_2) {
+        ui->tabWidget_2->setCurrentIndex(1); // Affiche l'onglet d'index 1
+    }
+}
+
+
+void MainWindow::onValiderReservation()
+{
+    // 1. Récupérer la sélection actuelle
+    QModelIndexList selected = ui->tableMaterielsDisponibles->selectionModel()->selectedRows();
+    if (selected.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Aucun matériel sélectionné");
+        return;
+    }
+
+    // 2. Récupérer les données du matériel
+    int row = selected.first().row();
+    int equipmentId = ui->tableMaterielsDisponibles->model()->data(
+                                                                ui->tableMaterielsDisponibles->model()->index(row, 0)).toInt();
+
+    int quantity = ui->spinQuantite_3->value();
+    int tournamentId = ui->comboTournois->currentData().toInt();
+
+    // 3. Demander le numéro de téléphone
+    bool ok;
+    QString recipientPhone = QInputDialog::getText(
+        this,
+        "Notification SMS",
+        "Entrez le numéro complet avec indicatif (+216XXXXXXXX):",
+        QLineEdit::Normal,
+        "+216", // Valeur par défaut
+        &ok
+        );
+
+    // Validation stricte
+    if (!ok || !recipientPhone.startsWith("+216") || recipientPhone.length() != 12) {
+        QMessageBox::warning(this, "Erreur", "Format invalide. Exemple: +21626790445");
+        return;
+    }
+
+    // 4. Effectuer la réservation
+    if (m_reservationManager->makeReservation(tournamentId, equipmentId, quantity, recipientPhone)) {
+        QMessageBox::information(this, "Succès", "Réservation confirmée avec notification SMS");
+        m_reservationManager->loadAvailableEquipment(ui->tableMaterielsDisponibles);
+        ui->affichRES->setModel(M.afficherMateriels()); // Rafraîchir le tableau principal
+
+        ui->tabWidget->setCurrentIndex(0);
+
+    } else {
+        QMessageBox::critical(this, "Erreur", "Échec de la réservation");
+    }
+}
+
+void MainWindow::on_btnAnnulerReservation_clicked()
+{
+    // Code pour annuler la réservation et revenir à la page d'ajout
+    if (ui->tabWidget) {
+        ui->tabWidget->setCurrentIndex(0); // Retour à l'onglet d'ajout
+    }
+}
+void MainWindow::detecterBadge() {
+    if (!db.isOpen()) {
+        QMessageBox::critical(this, "Erreur", "Base de données non connectée !");
+        return;
+    }
+
+    if (!A.getserial()->isOpen()) {
+        qDebug() << "Erreur : Port Arduino non ouvert !";
+        return;
+    }
+
+    QByteArray data = A.read_from_arduino();
+    qDebug() << "Données brutes reçues :" << data.toHex();
+
+    QString idCarte = QString(data).trimmed();
+    qDebug() << "ID Carte après trim :" << idCarte;
+
+    if (idCarte.isEmpty()) {
+        qDebug() << "Aucune donnée valide reçue.";
+        return;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("SELECT \"nom\" FROM \"Joueurs\" WHERE \"ID_CARTE\" = :id");
+    query.bindValue(":id", idCarte);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur SQL :" << query.lastError().text();
+        QMessageBox::critical(this, "Erreur", "Problème de base de données : " + query.lastError().text());
+        return;
+    }
+
+    if (query.next()) {
+        QString nomJoueur = query.value(0).toString();
+        QMessageBox::information(this, "Succès", "Joueur : " + nomJoueur);
+
+        // Envoyer au LCD
+        QString message = "Joueur: " + nomJoueur + "\n";
+        A.write_to_arduino(message.toUtf8());
+    } else {
+        qDebug() << "Aucun joueur trouvé pour ID :" << idCarte;
+        QMessageBox::warning(this, "Inconnu", "Carte non enregistrée.");
+
+        // Envoyer au LCD
+        QString message = "Carte Inconnue\n";
+        A.write_to_arduino(message.toUtf8());
+    }
+}
+
+
+
+
+
+void MainWindow::on_btnValider_clicked()
+{
+
+}
+
+
+//monta//
+
+
+
+
+
+void MainWindow::on_okM_clicked()
+{
+    // Fq    // F
+
+    if(!update){
+        tournois t(0,ui->nom->text(),
+                   ui->lieu->text(),
+                   ui->datedebut->date(),
+                   ui->datefin->date());
+        t.console();
+        t.insertData(db);
+        t.readData(ui->tableView_2,db);
+    }else{
+        update =false;
+        tournois t(id_update,
+                   ui->nom->text(),
+                   ui->lieu->text(),
+                   ui->datedebut->date(),
+                   ui->datefin->date());
+        t.updateData(ui->tableView_2,db);
+        t.readData(ui->tableView_2,db);
+        id_update=-1;
+    }
+}
+
+
+void MainWindow::on_suppM_clicked()
+{
+    int id =ui->id->text().toInt();
+    ui->id->setText("");
+    qDebug()<<id;
+    tournois t;
+    t.deleteData(id,ui->tableView_2,db);
+}
+
+
+void MainWindow::on_modifM_clicked()
+{
+    id_update = ui->id->text().toInt();
+    QSqlQuery query(db);
+
+    // Prepare the SQL query
+    query.prepare("SELECT * FROM MONTA WHERE ID = :ID");
+    query.bindValue(":ID", id_update); // Bind the actual value
+
+    if (query.exec()) {
+        // Check if a result is found
+        if (query.next()) {
+            // Fetch data from the database
+            QString nom = query.value("NOM").toString();
+            QString lieu = query.value("LIEU").toString();
+            QDate date_debut = query.value("DATE_DEBUT").toDate();
+            QDate date_fin = query.value("DATE_FIN").toDate();
+
+            // Set values in UI elements
+            ui->nom->setText(nom);
+            ui->lieu->setText(lieu);
+            ui->datedebut->setDate(date_debut);  // Use setDate() for QDateEdit
+            ui->datefin->setDate(date_fin);      // Use setDate() for QDateEdit
+            update =true;
+        } else {
+            qDebug() << "No record found for ID:" << id_update;
+        }
+    } else {
+        qDebug() << "Query execution failed:";
+    }
+
+
+}
+
+void MainWindow::on_id_2_textChanged(const QString &arg1)
+{
+    if(arg1!="")
+        ui->tableView_2->setModel(T.rechercherTournois(arg1));
+    else
+        ui->tableView_2->setModel(T.rechercherTournois(arg1));
+}
+
+
+void MainWindow::on_filtrerM_clicked()
+{
+
+    tournois T;
+    int index = ui->comboBox->currentIndex();
+    if (index == 0){
+        ui->tableView_2->setModel(T.tri_par_date_debut());
+    }else if (index == 1){
+        ui->tableView_2->setModel(T.tri_par_date_fin());
+    }
+
+}
+
+void MainWindow::on_pdfM_clicked()
+{
+    QString strStream;
+    QTextStream out(&strStream);
+
+    const int rowCount = ui->tableView_2->model()->rowCount();
+    const int columnCount = ui->tableView_2->model()->columnCount();
+
+    out << "<html>\n"
+        << "<head>\n"
+        << "<meta charset='utf-8'>\n"
+        << QString("<title>%1</title>\n").arg("strTitle")
+        << "</head>\n"
+        << "<body bgcolor='#ffffff' link='#5000A0'>\n"
+        << "<center><h1>Liste des tournois</h1><br><br>\n"
+        << "<table border='1' cellspacing='0' cellpadding='2'>\n";
+
+    // headers
+    out << "<thead><tr bgcolor='#f0f0f0'><th>Numero</th>";
+    for (int column = 0; column < columnCount; ++column) {
+        if (!ui->tableView->isColumnHidden(column)) {
+            out << QString("<th>%1</th>").arg(ui->tableView->model()->headerData(column, Qt::Horizontal).toString());
+        }
+    }
+    out << "</tr></thead>\n";
+
+    // data rows
+    for (int row = 0; row < rowCount; ++row) {
+        out << "<tr><td>" << row + 1 << "</td>";
+        for (int column = 0; column < columnCount; ++column) {
+            if (!ui->tableView_2->isColumnHidden(column)) {
+                QString data = ui->tableView_2->model()->data(ui->tableView_2->model()->index(row, column)).toString().simplified();
+                out << QString("<td>%1</td>").arg(data.isEmpty() ? "&nbsp;" : data);
+            }
+        }
+        out << "</tr>\n";
+    }
+
+    out << "</table></center>\n"
+        << "</body>\n"
+        << "</html>\n";
+
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Sauvegarder en PDF",
+                                                    QDir::homePath() + "/C:/",
+                                                    "Fichiers PDF (*.pdf)");
+    if (fileName.isEmpty()) return;
+
+    if (QFileInfo(fileName).suffix().isEmpty())
+        fileName.append(".pdf");
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(fileName);
+
+    // Set paper size using QPageLayout (Qt 6 style)
+    QPageLayout layout = printer.pageLayout();
+    layout.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageLayout(layout);
+
+    QTextDocument doc;
+    doc.setHtml(strStream);
+    doc.print(&printer);
+}
+
+
+void MainWindow::on_stasM_clicked()
+{
+    tournois t;
+    t.afficherDiagramme_tournois_Stat();
+}
+
+
+
+
+
+void MainWindow::on_tableView_activated(const QModelIndex &index)
+{
+
+
+    if (!index.isValid()) return;
+    QString qrCodeData;
+
+    int row = index.row();
+    QString val = ui->tableView_2->model()->index(row, 0).data().toString();
+    qDebug() << "ID sélectionné :" << val;
+
+    QSqlQuery qry;
+    qry.prepare("SELECT ID, NOM, LIEU, DATE_DEBUT, DATE_FIN FROM MONTA WHERE ID = :id");
+    qry.bindValue(":id", val);  // Sécurité avec requête paramétrée
+
+    if (qry.exec() && qry.next()) {
+        ui->nom->setText(qry.value(0).toString());
+        ui->lieu->setText(qry.value(1).toString());
+        ui->datedebut->setDate(QDate::fromString(qry.value(2).toString(), "yyyy-MM-dd"));
+        ui->datefin->setDate(QDate::fromString(qry.value(3).toString(), "yyyy-MM-dd"));
+
+
+        qrCodeData = "ID : " + qry.value(0).toString() +
+                     " | NOM : " + qry.value(1).toString() +
+                     " | LIEU : " + qry.value(2).toString() +
+                     " | DATE_DEBUT : " + qry.value(3).toString() +
+                     " | DATE_FIN : " + qry.value(4).toString() + ";";
+
+
+
+
+    } else {
+        qDebug() << "Erreur SQL : " << qry.lastError().text();
+    }
+    //QR CODE
+    using namespace qrcodegen;
+    // Create the QR Code object
+    QrCode qr = QrCode::encodeText( qrCodeData.toUtf8().data(), QrCode::Ecc::MEDIUM );
+    // Obtenir la taille du QR Code
+    qint32 sz = qr.getSize();
+    // Créer une image avec la taille du QR Code
+    QImage im(sz,sz, QImage::Format_RGB32);
+
+    QRgb black = qRgb(  0,  0,  0);
+    QRgb white = qRgb(255,255,255);
+    for (int y = 0; y < sz; y++)
+        for (int x = 0; x < sz; x++)
+            im.setPixel(x,y,qr.getModule(x, y) ? black : white );
+    // Afficher l'image du QR Code dans un QLabel
+    ui->qrCodeLabel_2->setPixmap( QPixmap::fromImage(im.scaled(150,150,Qt::KeepAspectRatio,Qt::FastTransformation),Qt::MonoOnly) );
+
+}
+
+// Vérifie les tournois qui se terminent demain
+void MainWindow::checkUpcomingtournoissEnd()
+{
+    m_upcomingEventsEnd.clear(); // Effacer les notifications précédentes
+
+    QDate today = QDate::currentDate();
+    QDate tomorrow = today.addDays(1);
+
+    QSqlQuery query;
+    query.prepare("SELECT ID, NOM, LIEU, DATE_DEBUT, DATE_FIN FROM MONTA WHERE DATE_FIN = :tomorrow");
+    query.bindValue(":tomorrow", tomorrow);
+
+    if (!query.exec()) {
+        qDebug() << "Erreur lors de la vérification des tournois à venir:" << query.lastError().text();
+        return;
+    }
+
+    while (query.next()) {
+        QString id = query.value(0).toString();
+        QString nom = query.value(1).toString();
+        QString lieu = query.value(2).toString();
+        QDate dateDebut = query.value(3).toDate();
+        QDate dateFin = query.value(4).toDate();
+
+        QString message = QString("⚠️ Le tournoi '%1' (ID: %2) se termine demain (%3)\n"
+                                  "Lieu: %4\nDébuté le: %5")
+                              .arg(nom)
+                              .arg(id)
+                              .arg(dateFin.toString("dd/MM/yyyy"))
+                              .arg(lieu)
+                              .arg(dateDebut.toString("dd/MM/yyyy"));
+
+        // Notification dans la barre d'état système
+        if (m_trayIcon && m_trayIcon->isVisible()) {
+            m_trayIcon->showMessage(
+                "Tournoi sur le point de se terminer",
+                message,
+                QSystemTrayIcon::Information,
+                10000 // 10 secondes
+                );
+        }
+
+        m_upcomingEventsEnd.append(message); // Stocker pour la consultation
+    }
+
+    updatetournoissButton();
+}
+
+// Met à jour le bouton de vérification (texte et style)
+void MainWindow::updatetournoissButton()
+{
+    QPushButton *eventsBtn = findChild<QPushButton*>("checkEventsButton");
+    if (!eventsBtn) return;
+
+    if (m_upcomingEventsEnd.isEmpty()) {
+        eventsBtn->setText("Vérifier les événements à venir");
+        eventsBtn->setStyleSheet("");
+    } else {
+        eventsBtn->setText(QString("Événements à venir (%1)").arg(m_upcomingEventsEnd.size()));
+        eventsBtn->setStyleSheet("background-color: #FFA500; font-weight: bold;");
+    }
+}
+
+// Quand on clique manuellement sur "Vérifier les événements à venir"
+void MainWindow::on_checktournoisButton_clicked()
+{
+    if (m_upcomingEventsEnd.isEmpty()) {
+        QMessageBox::information(this, "Événements à venir", "Aucun tournoi ne se termine bientôt.");
+        return;
+    }
+
+    QString fullMessage = "Tournois se terminant prochainement:\n\n" + m_upcomingEventsEnd.join("\n\n");
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Notifications de fin de tournoi");
+    msgBox.setText(fullMessage);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
+}
+
+
+
+
 

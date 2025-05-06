@@ -1,25 +1,47 @@
 QT += core gui widgets charts sql serialport
 
+QT       += core gui sql
+QT += core gui network
+QT += sql
+QT += network
+QT += printsupport
+QT += charts
+QT += core gui network
+QT += serialport
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 CONFIG += c++17
 
 SOURCES += \
     arduino.cpp \
+    arduinoo.cpp \
     equipe.cpp \
     main.cpp \
     mainwindow.cpp \
     match.cpp \
+    materiels.cpp \
     pie.cpp \
     piechart.cpp \
-    smallwindow.cpp
+    qrcode.cpp \
+    reservationmanager.cpp \
+    smallwindow.cpp \
+    sms.cpp \
+    tournois.cpp
 
 HEADERS += \
     arduino.h \
+    arduinoo.h \
     equipe.h \
     mainwindow.h \
     match.h \
+    materiels.h \
     pie.h \
     piechart.h \
-    smallwindow.h
+    qrcode.h \
+    reservationmanager.h \
+    smallwindow.h \
+    sms.h \
+    tournois.h
 
 FORMS += \
     mainwindow.ui \

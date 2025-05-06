@@ -140,8 +140,6 @@ QSqlQueryModel *tournois::rechercherTournois(QString recherche)
 }
 
 
-
-
 QSqlQueryModel * tournois::tri_par_date_debut()
 {
     QSqlQueryModel * model= new QSqlQueryModel();
