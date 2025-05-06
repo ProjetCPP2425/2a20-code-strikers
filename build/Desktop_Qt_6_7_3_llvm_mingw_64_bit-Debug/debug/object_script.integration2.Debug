@@ -1,0 +1,12 @@
+debug/arduino.o
+debug/equipe.o
+debug/main.o
+debug/mainwindow.o
+debug/match.o
+debug/piechart.o
+debug/qrcode.o
+debug/smallwindow.o
+debug/tournois.o
+debug/moc_mainwindow.o
+debug/moc_piechart.o
+debug/moc_smallwindow.o
